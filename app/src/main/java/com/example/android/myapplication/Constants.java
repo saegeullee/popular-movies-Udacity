@@ -13,4 +13,6 @@ public class Constants {
     public final static String MOVIE_TOP_RATED = MOVIE_URL + "/top_rated" + API_PARAM + API_KEY;
     public final static String MOVIE_POPULAR = MOVIE_URL + "/popular" + API_PARAM + API_KEY;
 
+    public final static String MOVIE_POSTER_IMAGE_PATH = "http://image.tmdb.org/t/p/w185/";
+
 }

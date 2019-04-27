@@ -2,10 +2,10 @@ package com.example.android.myapplication;
 
 public class Poster {
 
-    private String original_title;
+    private String original_title; //overview
     private String thumbnail;
     private String plot_synopsis;
-    private float user_rating;
+    private double user_rating; // vote_average
     private String release_date;
 
     public Poster() {
@@ -35,11 +35,11 @@ public class Poster {
         this.plot_synopsis = plot_synopsis;
     }
 
-    public float getUser_rating() {
+    public double getUser_rating() {
         return user_rating;
     }
 
-    public void setUser_rating(float user_rating) {
+    public void setUser_rating(double user_rating) {
         this.user_rating = user_rating;
     }
 

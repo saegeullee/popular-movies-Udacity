@@ -1,23 +1,28 @@
 package com.example.android.myapplication;
 
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MovieThumbnailAdapter extends RecyclerView.Adapter<MovieThumbnailAdapter.PosterImageViewHolder> {
+public class MovieThumbnailAdapter extends
+        RecyclerView.Adapter<MovieThumbnailAdapter.PosterImageViewHolder> {
 
     private List<Poster> mPosterList;
+    private Context mContext;
 
-    public MovieThumbnailAdapter(List<Poster> posterList) {
-        mPosterList = posterList;
+    public MovieThumbnailAdapter(Context context) {
+        mContext = context;
     }
 
     @NonNull
@@ -30,31 +35,57 @@ public class MovieThumbnailAdapter extends RecyclerView.Adapter<MovieThumbnailAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PosterImageViewHolder posterImageViewHolder, int i) {
+    public void onBindViewHolder(@NonNull PosterImageViewHolder holder, int i) {
 
         Poster poster = mPosterList.get(i);
-        posterImageViewHolder.bind(poster);
+//        posterImageViewHolder.bind(poster);
+
+        holder.tvTest.setText(poster.getOriginal_title());
+//        Picasso.get()
+//                .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
+//                .into(posterImageViewHolder.posterImage);
+
+        Glide.with(mContext).load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
+                .into(holder.posterImage);
 
 
     }
 
+    /**
+     * 먼저 이 메서드에서 mPosterList == null 조건을 추가 해주니
+     * onBindViewHolder 에서 null exception 에러가 발생하지 않았다.
+     * 어댑터는 내부적으로 getItemCount() 메서드를 통해 아이템의 개수를 다른 override 메서드들에게
+     * 제공함을 알 수 있다.
+     * @return
+     */
+
     @Override
     public int getItemCount() {
+        if(mPosterList == null) return 0;
         return mPosterList.size();
+    }
+
+    public void setPosterListData(List<Poster> posterList) {
+        mPosterList = posterList;
+        notifyDataSetChanged();
     }
 
     public class PosterImageViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView posterImage;
+        private TextView tvTest;
 
-        public PosterImageViewHolder(@NonNull View itemView) {
+        private PosterImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
             posterImage = itemView.findViewById(R.id.poster_image);
+            tvTest = itemView.findViewById(R.id.tv_test);
         }
 
-        public void bind(Poster poster) {
-            Picasso.get().load(poster.getThumbnail()).into(posterImage);
-        }
+//        private void bind(Poster poster) {
+//            Picasso.get()
+//                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
+//                    .into(posterImage);
+//        }
     }
 }
