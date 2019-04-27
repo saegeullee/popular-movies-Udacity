@@ -8,6 +8,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.android.myapplication.utils.MoviesApiJsonUtils;
 import com.example.android.myapplication.utils.NetworkUtils;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         initUI();
-        getMoviePoster();
+        getMoviePoster("popular");
     }
 
     private void initUI() {
@@ -56,14 +58,38 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void getMoviePoster() {
+    private void getMoviePoster(String queryMethod) {
 
         Log.d(TAG, "getMoviePoster: in");
-        new getMovieAsyncTask().execute();
+        new getMovieAsyncTask().execute(queryMethod);
 
     }
 
-    public class getMovieAsyncTask extends AsyncTask<Void, Void, List<Poster>> {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.popular: {
+                getMoviePoster("popular");
+
+                return true;
+            }
+            case R.id.top_rated: {
+                getMoviePoster("top_rated");
+
+                return true;
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public class getMovieAsyncTask extends AsyncTask<String, Void, List<Poster>> {
 
         /**
          * TODO question1
@@ -77,20 +103,37 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected List<Poster> doInBackground(Void... voids) {
+        protected List<Poster> doInBackground(String... strings) {
 
             Log.d(TAG, "doInBackground: in");
 
-            try {
-                String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_POPULAR);
-                Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
+            String queryMethod = strings[0];
+            Log.d(TAG, "doInBackground: queryMethod : " + queryMethod);
 
-                posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
+            if(queryMethod.equals("popular")) {
+                try {
+                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_POPULAR);
+                    Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
 
-                return posterList;
+                    posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                    return posterList;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if(queryMethod.equals("top_rated")) {
+                try {
+                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_TOP_RATED);
+                    Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
+
+                    posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
+
+                    return posterList;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             return null;
