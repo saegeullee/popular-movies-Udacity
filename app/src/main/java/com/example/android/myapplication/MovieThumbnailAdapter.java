@@ -1,16 +1,13 @@
 package com.example.android.myapplication;
 
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,11 +15,16 @@ import java.util.List;
 public class MovieThumbnailAdapter extends
         RecyclerView.Adapter<MovieThumbnailAdapter.PosterImageViewHolder> {
 
-    private List<Poster> mPosterList;
-    private Context mContext;
+    public interface OnItemClickListener {
+        void onItemClicked(int position);
+    }
 
-    public MovieThumbnailAdapter(Context context) {
-        mContext = context;
+    private OnItemClickListener mClickListener;
+
+    private List<Poster> mPosterList;
+
+    public MovieThumbnailAdapter(OnItemClickListener listener) {
+        mClickListener = listener;
     }
 
     @NonNull
@@ -38,16 +40,7 @@ public class MovieThumbnailAdapter extends
     public void onBindViewHolder(@NonNull PosterImageViewHolder holder, int i) {
 
         Poster poster = mPosterList.get(i);
-//        posterImageViewHolder.bind(poster);
-
-        holder.tvTest.setText(poster.getOriginal_title());
-//        Picasso.get()
-//                .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
-//                .into(posterImageViewHolder.posterImage);
-
-        Glide.with(mContext).load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
-                .into(holder.posterImage);
-
+        holder.bind(poster);
 
     }
 
@@ -70,22 +63,26 @@ public class MovieThumbnailAdapter extends
         notifyDataSetChanged();
     }
 
-    public class PosterImageViewHolder extends RecyclerView.ViewHolder {
+    public class PosterImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView posterImage;
-        private TextView tvTest;
 
         private PosterImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
             posterImage = itemView.findViewById(R.id.poster_image);
-            tvTest = itemView.findViewById(R.id.tv_test);
+            itemView.setOnClickListener(this);
         }
 
-//        private void bind(Poster poster) {
-//            Picasso.get()
-//                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
-//                    .into(posterImage);
-//        }
+        private void bind(Poster poster) {
+            Picasso.get()
+                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
+                    .into(posterImage);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mClickListener.onItemClicked(getAdapterPosition());
+        }
     }
 }

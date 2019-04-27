@@ -1,5 +1,6 @@
 package com.example.android.myapplication;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,12 +16,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MovieThumbnailAdapter.OnItemClickListener {
+
+    @Override
+    public void onItemClicked(int position) {
+
+        Intent intent = new Intent(MainActivity.this, MovieDetailsActivity.class);
+        intent.putExtra(getString(R.string.movie), posterList.get(position));
+        startActivity(intent);
+
+    }
 
     private static final String TAG = "MainActivity";
 
     private RecyclerView mRecyclerView;
     private MovieThumbnailAdapter mAdapter;
+
+    private List<Poster> posterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private void initUI() {
 
         mRecyclerView = findViewById(R.id.rv_movie_thumbnail);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new MovieThumbnailAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+        posterList = new ArrayList<>();
 
     }
 
@@ -51,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
     public class getMovieAsyncTask extends AsyncTask<Void, Void, List<Poster>> {
 
         /**
-         * Question
+         * TODO question1
          * when should I leave or delete super. method ?
+         * how do I know it ?
          */
 
         @Override
@@ -68,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_POPULAR);
                 Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
-                
-                List<Poster> posterList;
+
                 posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
 
                 return posterList;

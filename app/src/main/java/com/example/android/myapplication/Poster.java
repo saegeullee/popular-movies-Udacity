@@ -1,6 +1,9 @@
 package com.example.android.myapplication;
 
-public class Poster {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Poster implements Parcelable {
 
     private String original_title; //overview
     private String thumbnail;
@@ -10,6 +13,26 @@ public class Poster {
 
     public Poster() {
     }
+
+    protected Poster(Parcel in) {
+        original_title = in.readString();
+        thumbnail = in.readString();
+        plot_synopsis = in.readString();
+        user_rating = in.readDouble();
+        release_date = in.readString();
+    }
+
+    public static final Creator<Poster> CREATOR = new Creator<Poster>() {
+        @Override
+        public Poster createFromParcel(Parcel in) {
+            return new Poster(in);
+        }
+
+        @Override
+        public Poster[] newArray(int size) {
+            return new Poster[size];
+        }
+    };
 
     public String getOriginal_title() {
         return original_title;
@@ -60,5 +83,19 @@ public class Poster {
                 ", user_rating=" + user_rating +
                 ", release_date='" + release_date + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(original_title);
+        dest.writeString(thumbnail);
+        dest.writeString(plot_synopsis);
+        dest.writeDouble(user_rating);
+        dest.writeString(release_date);
     }
 }
