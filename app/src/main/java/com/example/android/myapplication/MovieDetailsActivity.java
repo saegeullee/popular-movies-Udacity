@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.myapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
@@ -15,7 +16,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private TextView release_date, vote_average, plot_synopsis;
     private ImageView poster_image;
 
-    private Poster mPoster;
+    private Movie mPoster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

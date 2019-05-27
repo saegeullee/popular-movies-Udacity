@@ -2,7 +2,7 @@ package com.example.android.myapplication.utils;
 
 import android.util.Log;
 
-import com.example.android.myapplication.Poster;
+import com.example.android.myapplication.models.Movie;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +15,7 @@ public class MoviesApiJsonUtils {
 
     private static final String TAG = "MoviesApiJsonUtils";
 
-    public static List<Poster> getPosterListFromJson(String posterListJsonStr) {
+    public static List<Movie> getPosterListFromJson(String posterListJsonStr) {
 
 
         try {
@@ -23,13 +23,13 @@ public class MoviesApiJsonUtils {
 
             JSONArray resultsArray = originalJsonObject.getJSONArray("results");
 
-            List<Poster> posterList = new ArrayList<>();
+            List<Movie> posterList = new ArrayList<>();
 
             for(int i = 0; i < resultsArray.length(); i++) {
 
                 JSONObject movieObject = resultsArray.getJSONObject(i);
 
-                Poster poster = new Poster();
+                Movie poster = new Movie();
                 poster.setOriginal_title(movieObject.getString("title"));
                 poster.setPlot_synopsis(movieObject.getString("overview"));
                 poster.setRelease_date(movieObject.getString("release_date"));

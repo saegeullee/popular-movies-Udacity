@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.myapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class MovieThumbnailAdapter extends
 
     private OnItemClickListener mClickListener;
 
-    private List<Poster> mPosterList;
+    private List<Movie> mPosterList;
 
     public MovieThumbnailAdapter(OnItemClickListener listener) {
         mClickListener = listener;
@@ -39,7 +40,7 @@ public class MovieThumbnailAdapter extends
     @Override
     public void onBindViewHolder(@NonNull PosterImageViewHolder holder, int i) {
 
-        Poster poster = mPosterList.get(i);
+        Movie poster = mPosterList.get(i);
         holder.bind(poster);
 
     }
@@ -58,7 +59,7 @@ public class MovieThumbnailAdapter extends
         return mPosterList.size();
     }
 
-    public void setPosterListData(List<Poster> posterList) {
+    public void setPosterListData(List<Movie> posterList) {
         mPosterList = posterList;
         notifyDataSetChanged();
     }
@@ -74,7 +75,7 @@ public class MovieThumbnailAdapter extends
             itemView.setOnClickListener(this);
         }
 
-        private void bind(Poster poster) {
+        private void bind(Movie poster) {
             Picasso.get()
                     .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
                     .into(posterImage);

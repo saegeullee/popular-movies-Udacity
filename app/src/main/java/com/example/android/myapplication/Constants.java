@@ -9,6 +9,8 @@ public class Constants {
     public final static String API_PARAM = "?api_key=";
     public final static String API_KEY = "dc83f0772a965c764875e5ec906f8397";
 
+    public final static String MOVIE_TOP_RATED_URL = "top_rated";
+    public final static String MOVIE_POPULAR_URL = "popular";
 
     public final static String MOVIE_TOP_RATED = MOVIE_URL + "/top_rated" + API_PARAM + API_KEY;
     public final static String MOVIE_POPULAR = MOVIE_URL + "/popular" + API_PARAM + API_KEY;

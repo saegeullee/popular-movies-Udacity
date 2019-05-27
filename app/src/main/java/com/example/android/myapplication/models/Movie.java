@@ -1,20 +1,24 @@
-package com.example.android.myapplication;
+package com.example.android.myapplication.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Poster implements Parcelable {
+import java.util.List;
+
+public class Movie implements Parcelable {
 
     private String original_title; //overview
     private String thumbnail;
     private String plot_synopsis;
     private double user_rating; // vote_average
     private String release_date;
+    private List<VideoTrailer> videoTrailers;
+    private List<Review> reviews;
 
-    public Poster() {
+    public Movie() {
     }
 
-    protected Poster(Parcel in) {
+    protected Movie(Parcel in) {
         original_title = in.readString();
         thumbnail = in.readString();
         plot_synopsis = in.readString();
@@ -22,15 +26,15 @@ public class Poster implements Parcelable {
         release_date = in.readString();
     }
 
-    public static final Creator<Poster> CREATOR = new Creator<Poster>() {
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
-        public Poster createFromParcel(Parcel in) {
-            return new Poster(in);
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
         }
 
         @Override
-        public Poster[] newArray(int size) {
-            return new Poster[size];
+        public Movie[] newArray(int size) {
+            return new Movie[size];
         }
     };
 
@@ -74,14 +78,32 @@ public class Poster implements Parcelable {
         this.release_date = release_date;
     }
 
+    public List<VideoTrailer> getVideoTrailers() {
+        return videoTrailers;
+    }
+
+    public void setVideoTrailers(List<VideoTrailer> videoTrailers) {
+        this.videoTrailers = videoTrailers;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
     @Override
     public String toString() {
-        return "Poster{" +
+        return "Movie{" +
                 "original_title='" + original_title + '\'' +
                 ", thumbnail='" + thumbnail + '\'' +
                 ", plot_synopsis='" + plot_synopsis + '\'' +
                 ", user_rating=" + user_rating +
                 ", release_date='" + release_date + '\'' +
+                ", videoTrailers=" + videoTrailers +
+                ", reviews=" + reviews +
                 '}';
     }
 

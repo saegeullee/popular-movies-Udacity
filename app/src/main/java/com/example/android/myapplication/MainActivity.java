@@ -5,12 +5,12 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.utils.MoviesApiJsonUtils;
 import com.example.android.myapplication.utils.NetworkUtils;
 
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private MovieThumbnailAdapter mAdapter;
 
-    private List<Poster> posterList;
+    private List<Movie> posterList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public class getMovieAsyncTask extends AsyncTask<String, Void, List<Poster>> {
+    public class getMovieAsyncTask extends AsyncTask<String, Void, List<Movie>> {
 
         /**
          * TODO question1
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected List<Poster> doInBackground(String... strings) {
+        protected List<Movie> doInBackground(String... strings) {
 
             Log.d(TAG, "doInBackground: in");
 
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(List<Poster> posters) {
+        protected void onPostExecute(List<Movie> posters) {
 
             Log.d(TAG, "onPostExecute: in");
 
