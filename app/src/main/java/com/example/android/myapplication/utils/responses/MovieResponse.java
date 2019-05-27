@@ -4,20 +4,22 @@ import com.example.android.myapplication.models.Movie;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class MovieResponse {
 
     @SerializedName("results")
     @Expose()
-    private Movie movie;
+    private List<Movie> movies;
 
-    public Movie getMovie() {
-        return movie;
+    public List<Movie> getMovies() {
+        return movies;
     }
 
     @Override
     public String toString() {
         return "MovieResponse{" +
-                "movie=" + movie +
+                "movies=" + movies +
                 '}';
     }
 }

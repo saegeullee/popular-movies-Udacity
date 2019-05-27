@@ -45,12 +45,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if(mPoster != null) {
             setTitle(mPoster.getOriginal_title());
-            vote_average.setText(String.valueOf(mPoster.getUser_rating()));
+            vote_average.setText(String.valueOf(mPoster.getVote_average()));
             release_date.setText(mPoster.getRelease_date());
-            plot_synopsis.setText(mPoster.getPlot_synopsis());
+            plot_synopsis.setText(mPoster.getOverview());
 
             Picasso.get()
-                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + mPoster.getThumbnail())
+                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + mPoster.getPoster_path())
                     .into(poster_image);
         }
 

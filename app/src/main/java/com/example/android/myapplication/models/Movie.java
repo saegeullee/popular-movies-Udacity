@@ -8,21 +8,19 @@ import java.util.List;
 public class Movie implements Parcelable {
 
     private String original_title; //overview
-    private String thumbnail;
-    private String plot_synopsis;
-    private double user_rating; // vote_average
+    private String poster_path;
+    private String overview;
+    private double vote_average; // vote_average
     private String release_date;
-    private List<VideoTrailer> videoTrailers;
-    private List<Review> reviews;
 
     public Movie() {
     }
 
     protected Movie(Parcel in) {
         original_title = in.readString();
-        thumbnail = in.readString();
-        plot_synopsis = in.readString();
-        user_rating = in.readDouble();
+        poster_path = in.readString();
+        overview = in.readString();
+        vote_average = in.readDouble();
         release_date = in.readString();
     }
 
@@ -46,28 +44,28 @@ public class Movie implements Parcelable {
         this.original_title = original_title;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getPoster_path() {
+        return poster_path;
     }
 
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
+    public void setPoster_path(String poster_path) {
+        this.poster_path = poster_path;
     }
 
-    public String getPlot_synopsis() {
-        return plot_synopsis;
+    public String getOverview() {
+        return overview;
     }
 
-    public void setPlot_synopsis(String plot_synopsis) {
-        this.plot_synopsis = plot_synopsis;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
-    public double getUser_rating() {
-        return user_rating;
+    public double getVote_average() {
+        return vote_average;
     }
 
-    public void setUser_rating(double user_rating) {
-        this.user_rating = user_rating;
+    public void setVote_average(double vote_average) {
+        this.vote_average = vote_average;
     }
 
     public String getRelease_date() {
@@ -78,32 +76,14 @@ public class Movie implements Parcelable {
         this.release_date = release_date;
     }
 
-    public List<VideoTrailer> getVideoTrailers() {
-        return videoTrailers;
-    }
-
-    public void setVideoTrailers(List<VideoTrailer> videoTrailers) {
-        this.videoTrailers = videoTrailers;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
     @Override
     public String toString() {
         return "Movie{" +
                 "original_title='" + original_title + '\'' +
-                ", thumbnail='" + thumbnail + '\'' +
-                ", plot_synopsis='" + plot_synopsis + '\'' +
-                ", user_rating=" + user_rating +
+                ", poster_path='" + poster_path + '\'' +
+                ", overview='" + overview + '\'' +
+                ", vote_average=" + vote_average +
                 ", release_date='" + release_date + '\'' +
-                ", videoTrailers=" + videoTrailers +
-                ", reviews=" + reviews +
                 '}';
     }
 
@@ -115,9 +95,9 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(original_title);
-        dest.writeString(thumbnail);
-        dest.writeString(plot_synopsis);
-        dest.writeDouble(user_rating);
+        dest.writeString(poster_path);
+        dest.writeString(overview);
+        dest.writeDouble(vote_average);
         dest.writeString(release_date);
     }
 }

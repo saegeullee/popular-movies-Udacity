@@ -10,7 +10,7 @@ public class NetworkRequestGenerator {
 
     private static Retrofit.Builder retrofitBuilder =
             new Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(Constants.MOVIE_URL)
             .addConverterFactory(GsonConverterFactory.create());
 
     private static Retrofit retrofit = retrofitBuilder.build();

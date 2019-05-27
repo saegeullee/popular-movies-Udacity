@@ -5,7 +5,7 @@ public class Constants {
     //https://api.themoviedb.org/3/movie/top_rated?api_key=dc83f0772a965c764875e5ec906f8397
 
     public final static String BASE_URL = "https://api.themoviedb.org";
-    public final static String MOVIE_URL = BASE_URL + "/3/movie";
+    public final static String MOVIE_URL = BASE_URL + "/3/movie/";
     public final static String API_PARAM = "?api_key=";
     public final static String API_KEY = "dc83f0772a965c764875e5ec906f8397";
 

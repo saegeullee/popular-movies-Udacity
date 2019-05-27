@@ -11,12 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.myapplication.models.Movie;
+import com.example.android.myapplication.requests.NetworkRequestGenerator;
 import com.example.android.myapplication.utils.MoviesApiJsonUtils;
 import com.example.android.myapplication.utils.NetworkUtils;
+import com.example.android.myapplication.utils.responses.MovieResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements MovieThumbnailAdapter.OnItemClickListener {
@@ -61,8 +67,56 @@ public class MainActivity extends AppCompatActivity
     private void getMoviePoster(String queryMethod) {
 
         Log.d(TAG, "getMoviePoster: in");
-        new getMovieAsyncTask().execute(queryMethod);
 
+        if(queryMethod.equals("top_rated")) {
+
+            getMovieByTopRated().enqueue(new Callback<MovieResponse>() {
+                @Override
+                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+
+                    List<Movie> movies = response.body().getMovies();
+
+                    if(movies != null)
+                        Log.d(TAG, "onResponse: movies : " + movies.toString());
+                }
+
+                @Override
+                public void onFailure(Call<MovieResponse> call, Throwable t) {
+
+                }
+            });
+
+        } else if(queryMethod.equals("popular")) {
+
+            getMovieByPopularity().enqueue(new Callback<MovieResponse>() {
+                @Override
+                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                    List<Movie> movies = response.body().getMovies();
+
+                    if(movies != null)
+                        Log.d(TAG, "onResponse: movies : " + movies.toString());
+                }
+
+                @Override
+                public void onFailure(Call<MovieResponse> call, Throwable t) {
+
+                }
+            });
+        }
+
+
+    }
+
+    private Call<MovieResponse> getMovieByTopRated() {
+        return NetworkRequestGenerator.getMoviesApi().getMovieByTopRated(
+                Constants.API_KEY
+        );
+    }
+
+    private Call<MovieResponse> getMovieByPopularity() {
+        return NetworkRequestGenerator.getMoviesApi().getMovieByPopularity(
+                Constants.API_KEY
+        );
     }
 
     @Override
@@ -89,63 +143,63 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public class getMovieAsyncTask extends AsyncTask<String, Void, List<Movie>> {
-
-        /**
-         * TODO question1
-         * when should I leave or delete super. method ?
-         * how do I know it ?
-         */
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected List<Movie> doInBackground(String... strings) {
-
-            Log.d(TAG, "doInBackground: in");
-
-            String queryMethod = strings[0];
-            Log.d(TAG, "doInBackground: queryMethod : " + queryMethod);
-
-            if(queryMethod.equals("popular")) {
-                try {
-                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_POPULAR);
-                    Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
-
-                    posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
-
-                    return posterList;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if(queryMethod.equals("top_rated")) {
-                try {
-                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_TOP_RATED);
-                    Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
-
-                    posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
-
-                    return posterList;
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Movie> posters) {
-
-            Log.d(TAG, "onPostExecute: in");
-
-            if(posters != null)
-                mAdapter.setPosterListData(posters);
-        }
-    }
+//    public class getMovieAsyncTask extends AsyncTask<String, Void, List<Movie>> {
+//
+//        /**
+//         * TODO question1
+//         * when should I leave or delete super. method ?
+//         * how do I know it ?
+//         */
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected List<Movie> doInBackground(String... strings) {
+//
+//            Log.d(TAG, "doInBackground: in");
+//
+//            String queryMethod = strings[0];
+//            Log.d(TAG, "doInBackground: queryMethod : " + queryMethod);
+//
+//            if(queryMethod.equals("popular")) {
+//                try {
+//                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_POPULAR);
+//                    Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
+//
+//                    posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
+//
+//                    return posterList;
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            } else if(queryMethod.equals("top_rated")) {
+//                try {
+//                    String jsonMovieResponse = NetworkUtils.getResponseFromHttpUrl(Constants.MOVIE_TOP_RATED);
+//                    Log.d(TAG, "doInBackground: jsonMovieResponse + " + jsonMovieResponse);
+//
+//                    posterList = MoviesApiJsonUtils.getPosterListFromJson(jsonMovieResponse);
+//
+//                    return posterList;
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(List<Movie> posters) {
+//
+//            Log.d(TAG, "onPostExecute: in");
+//
+//            if(posters != null)
+//                mAdapter.setPosterListData(posters);
+//        }
+//    }
 }

@@ -77,7 +77,7 @@ public class MovieThumbnailAdapter extends
 
         private void bind(Movie poster) {
             Picasso.get()
-                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getThumbnail())
+                    .load(Constants.MOVIE_POSTER_IMAGE_PATH + poster.getPoster_path())
                     .into(posterImage);
         }
 

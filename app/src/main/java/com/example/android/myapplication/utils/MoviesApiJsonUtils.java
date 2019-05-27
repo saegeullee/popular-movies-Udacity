@@ -29,16 +29,16 @@ public class MoviesApiJsonUtils {
 
                 JSONObject movieObject = resultsArray.getJSONObject(i);
 
-                Movie poster = new Movie();
-                poster.setOriginal_title(movieObject.getString("title"));
-                poster.setPlot_synopsis(movieObject.getString("overview"));
-                poster.setRelease_date(movieObject.getString("release_date"));
-                poster.setThumbnail(movieObject.getString("poster_path"));
-                poster.setUser_rating(movieObject.getDouble("vote_average"));
+                Movie movie = new Movie();
+                movie.setOriginal_title(movieObject.getString("title"));
+                movie.setOverview(movieObject.getString("overview"));
+                movie.setRelease_date(movieObject.getString("release_date"));
+                movie.setPoster_path(movieObject.getString("poster_path"));
+                movie.setVote_average(movieObject.getDouble("vote_average"));
 
-                Log.d(TAG, "getPosterListFromJson: poster : " + poster.toString());
+                Log.d(TAG, "getPosterListFromJson: poster : " + movie.toString());
 
-                posterList.add(poster);
+                posterList.add(movie);
 
             }
 
