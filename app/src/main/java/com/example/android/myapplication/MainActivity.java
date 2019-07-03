@@ -114,10 +114,20 @@ public class MainActivity extends AppCompatActivity
             });
         } else if(queryMethod.equals("favorites")) {
 
-            List<FavoriteMovieEntry> movieEntries = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
-            List<Movie> movies = changeModel(movieEntries);
-            posterList = movies;
-            mAdapter.setPosterListData(posterList);
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    List<FavoriteMovieEntry> movieEntries = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
+                    posterList = changeModel(movieEntries);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.setPosterListData(posterList);
+                        }
+                    });
+                }
+            });
         }
     }
 

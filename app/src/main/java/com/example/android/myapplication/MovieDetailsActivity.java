@@ -46,24 +46,46 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private void testLoadAll() {
 
         Log.d(TAG, "testLoadAll: in");
-        List<FavoriteMovieEntry> list = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
-        for(int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).toString());
-        }
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                final List<FavoriteMovieEntry> list = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for(int i = 0; i < list.size(); i++) {
+                            System.out.println(list.get(i).toString());
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void didUserMarkThisMovieAsFavorite() {
 
         if(mMovie != null) {
-            mFavoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mFavoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
 
-            if(mFavoriteMovieEntry == null) {
-                isMarkedFavorite = false;
-                setMarkAsFavoriteBtn();
-            } else {
-                isMarkedFavorite = true;
-                setMarkAsFavoriteBtn();
-            }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if(mFavoriteMovieEntry == null) {
+                                isMarkedFavorite = false;
+                                setMarkAsFavoriteBtn();
+                            } else {
+                                isMarkedFavorite = true;
+                                setMarkAsFavoriteBtn();
+                            }
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -110,7 +132,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
                     Date date = new Date();
 
-                    FavoriteMovieEntry favoriteMovieEntry = new FavoriteMovieEntry(
+                    final FavoriteMovieEntry favoriteMovieEntry = new FavoriteMovieEntry(
                             mMovie.getOriginal_title(),
                             mMovie.getPoster_path(),
                             mMovie.getOverview(),
@@ -118,17 +140,39 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             mMovie.getRelease_date(),
                             date);
 
-                    mDatabase.favoriteMovieDao().insertFavoriteMovie(favoriteMovieEntry);
-                    isMarkedFavorite = true;
-                    setMarkAsFavoriteBtn();
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDatabase.favoriteMovieDao().insertFavoriteMovie(favoriteMovieEntry);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isMarkedFavorite = true;
+                                    setMarkAsFavoriteBtn();
+                                }
+                            });
+                        }
+                    });
+
 
                 } else if(mMovie != null && isMarkedFavorite) {
 
-                    FavoriteMovieEntry favoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            FavoriteMovieEntry favoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
+                            mDatabase.favoriteMovieDao().deleteFavoriteMovie(favoriteMovieEntry);
 
-                    mDatabase.favoriteMovieDao().deleteFavoriteMovie(favoriteMovieEntry);
-                    isMarkedFavorite = false;
-                    setMarkAsFavoriteBtn();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    isMarkedFavorite = false;
+                                    setMarkAsFavoriteBtn();
+                                }
+                            });
+                        }
+                    });
                 }
             }
         });
@@ -155,7 +199,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                mDatabase.favoriteMovieDao().deleteAllData();
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDatabase.favoriteMovieDao().deleteAllData();
+                    }
+                });
                 return true;
         }
 
