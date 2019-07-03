@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity
                 public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
 
                     List<Movie> movies = response.body().getMovies();
-                    mAdapter.setPosterListData(movies);
+                    posterList = movies;
+                    mAdapter.setPosterListData(posterList);
 
                     if(movies != null)
                         Log.d(TAG, "onResponse: movies : " + movies.toString());
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
                     List<Movie> movies = response.body().getMovies();
-                    mAdapter.setPosterListData(movies);
+                    posterList = movies;
+                    mAdapter.setPosterListData(posterList);
 
                     if(movies != null)
                         Log.d(TAG, "onResponse: movies : " + movies.toString());
