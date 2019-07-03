@@ -1,7 +1,10 @@
 package com.example.android.myapplication;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -114,20 +117,20 @@ public class MainActivity extends AppCompatActivity
             });
         } else if(queryMethod.equals("favorites")) {
 
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    List<FavoriteMovieEntry> movieEntries = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
-                    posterList = changeModel(movieEntries);
+            LiveData<List<FavoriteMovieEntry>> movieEntries = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.setPosterListData(posterList);
-                        }
-                    });
+            movieEntries.observe(this, new Observer<List<FavoriteMovieEntry>>() {
+                @Override
+                public void onChanged(@Nullable List<FavoriteMovieEntry> favoriteMovieEntries) {
+                    Log.d(TAG, "onChanged: Retrieving database update from LiveData");
+
+                    if(favoriteMovieEntries != null)
+                    posterList = changeModel(favoriteMovieEntries);
+                    mAdapter.setPosterListData(posterList);
+
                 }
             });
+
         }
     }
 

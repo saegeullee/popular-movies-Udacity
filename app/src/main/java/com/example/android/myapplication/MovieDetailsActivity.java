@@ -1,5 +1,8 @@
 package com.example.android.myapplication;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,22 +49,26 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private void testLoadAll() {
 
         Log.d(TAG, "testLoadAll: in");
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                final List<FavoriteMovieEntry> list = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
 
-                runOnUiThread(new Runnable() {
+                final LiveData<List<FavoriteMovieEntry>> list = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
+
+                list.observe(this, new Observer<List<FavoriteMovieEntry>>() {
                     @Override
-                    public void run() {
-                        for(int i = 0; i < list.size(); i++) {
-                            System.out.println(list.get(i).toString());
+                    public void onChanged(@Nullable List<FavoriteMovieEntry> favoriteMovieEntries) {
+                        Log.d(TAG, "onChanged: Retrieving database update from LiveData");
+
+                        for(int i = 0; i < favoriteMovieEntries.size(); i++) {
+                            System.out.println(favoriteMovieEntries.get(i).toString());
                         }
                     }
                 });
-            }
-        });
     }
+
+    /**
+     * 현재 문제점
+     * 메인액티비티에서 popular에서 details Activity 로 갔다가 메인으로
+     * 되돌아오면 favorites 가 목록에 보인다.
+     */
 
     private void didUserMarkThisMovieAsFavorite() {
 
