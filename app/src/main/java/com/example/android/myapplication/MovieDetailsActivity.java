@@ -3,6 +3,7 @@ package com.example.android.myapplication;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private TextView release_date, vote_average, plot_synopsis;
     private ImageView poster_image;
+    private Button mark_as_favorite;
 
     private Movie mPoster;
 
@@ -42,6 +44,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         vote_average = findViewById(R.id.vote_average);
         plot_synopsis = findViewById(R.id.plot_synopsis);
         poster_image = findViewById(R.id.poster_image);
+        mark_as_favorite = findViewById(R.id.mark_as_favorite);
 
         if(mPoster != null) {
             setTitle(mPoster.getOriginal_title());
