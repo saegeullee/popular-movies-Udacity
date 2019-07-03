@@ -9,5 +9,6 @@
     <string name="top_rated">top rated</string>
 
     <string name="mark_as_favorite">mark as favorite</string>
+    <string name="mark_as_unfavorite">unfavorite</string>
 
 </resources>

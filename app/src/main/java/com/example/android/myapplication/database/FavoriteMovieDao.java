@@ -1,23 +1,31 @@
 package com.example.android.myapplication.database;
 
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import retrofit2.http.DELETE;
-
+@Dao
 public interface FavoriteMovieDao {
 
     @Query("SELECT * FROM favoriteMovie ORDER BY updated_at DESC")
     List<FavoriteMovieEntry> loadAllFavoriteMovies();
 
+    @Query("SELECT * FROM favoriteMovie WHERE original_title = :title")
+    FavoriteMovieEntry getMovieByTitle(String title);
+
     @Insert
     void insertFavoriteMovie(FavoriteMovieEntry movieEntry);
 
     @Delete
-    void deleteFovoriteMovie(FavoriteMovieEntry movieEntry);
+    void deleteFavoriteMovie(FavoriteMovieEntry movieEntry);
+
+
+
+    @Query("DELETE FROM favoriteMovie")
+    void  deleteAllData();
 
 
 }

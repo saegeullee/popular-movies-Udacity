@@ -33,8 +33,6 @@ public class FavoriteMovieEntry {
     }
 
     // Use this constructor when read from DB
-
-
     public FavoriteMovieEntry(int id, String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
         this.id = id;
         this.original_title = original_title;
