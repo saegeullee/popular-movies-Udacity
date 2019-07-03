@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.myapplication.database.AppDatabase;
+import com.example.android.myapplication.database.FavoriteMovieEntry;
 import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.requests.NetworkRequestGenerator;
 import com.example.android.myapplication.utils.MoviesApiJsonUtils;
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity
 
     private List<Movie> posterList;
 
+    private AppDatabase mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setAdapter(mAdapter);
 
         posterList = new ArrayList<>();
+
+        mDatabase = AppDatabase.getInstance(getApplicationContext());
 
     }
 
@@ -106,9 +112,35 @@ public class MainActivity extends AppCompatActivity
 
                 }
             });
+        } else if(queryMethod.equals("favorites")) {
+
+            List<FavoriteMovieEntry> movieEntries = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
+            List<Movie> movies = changeModel(movieEntries);
+            posterList = movies;
+            mAdapter.setPosterListData(posterList);
+        }
+    }
+
+    private List<Movie> changeModel(List<FavoriteMovieEntry> movieEntries) {
+
+        List<Movie> movieList = new ArrayList<>();
+
+        for(int i = 0; i< movieEntries.size(); i++) {
+            FavoriteMovieEntry movieEntry = movieEntries.get(i);
+
+            Movie movie = new Movie();
+            movie.setOriginal_title(movieEntry.getOriginal_title());
+            movie.setPoster_path(movieEntry.getPoster_path());
+            movie.setVote_average(movieEntry.getVote_average());
+            movie.setOverview(movieEntry.getOverview());
+            movie.setRelease_date(movieEntry.getRelease_date());
+
+            movieList.add(movie);
         }
 
+        Log.d(TAG, "changeModel: movieList size : " + movieList.size());
 
+        return movieList;
     }
 
     private Call<MovieResponse> getMovieByTopRated() {
@@ -140,6 +172,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.top_rated: {
                 getMoviePoster("top_rated");
 
+                return true;
+            }
+
+            case R.id.favorites: {
+                getMoviePoster("favorites");
                 return true;
             }
 
