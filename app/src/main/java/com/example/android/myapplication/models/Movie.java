@@ -1,22 +1,56 @@
 package com.example.android.myapplication.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
 import java.util.List;
 
+@Entity(tableName = "Movie")
 public class Movie implements Parcelable {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String original_title; //overview
     private String poster_path;
     private String overview;
     private double vote_average; // vote_average
     private String release_date;
 
+    @ColumnInfo(name="updated_at")
+    private Date updatedAt;
+
     public Movie() {
     }
 
+    // Use this constructor when add new favorite movie to DB
+    @Ignore
+    public Movie(String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
+        this.original_title = original_title;
+        this.poster_path = poster_path;
+        this.overview = overview;
+        this.vote_average = vote_average;
+        this.release_date = release_date;
+        this.updatedAt = updatedAt;
+    }
+
+    // Use this constructor when read from DB
+    public Movie(int id, String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
+        this.id = id;
+        this.original_title = original_title;
+        this.poster_path = poster_path;
+        this.overview = overview;
+        this.vote_average = vote_average;
+        this.release_date = release_date;
+        this.updatedAt = updatedAt;
+    }
+
     protected Movie(Parcel in) {
+        id = in.readInt();
         original_title = in.readString();
         poster_path = in.readString();
         overview = in.readString();
@@ -76,15 +110,20 @@ public class Movie implements Parcelable {
         this.release_date = release_date;
     }
 
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "original_title='" + original_title + '\'' +
-                ", poster_path='" + poster_path + '\'' +
-                ", overview='" + overview + '\'' +
-                ", vote_average=" + vote_average +
-                ", release_date='" + release_date + '\'' +
-                '}';
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -94,10 +133,24 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(original_title);
         dest.writeString(poster_path);
         dest.writeString(overview);
         dest.writeDouble(vote_average);
         dest.writeString(release_date);
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", original_title='" + original_title + '\'' +
+                ", poster_path='" + poster_path + '\'' +
+                ", overview='" + overview + '\'' +
+                ", vote_average=" + vote_average +
+                ", release_date='" + release_date + '\'' +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

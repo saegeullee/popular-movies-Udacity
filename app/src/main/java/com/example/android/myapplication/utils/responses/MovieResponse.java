@@ -1,5 +1,7 @@
 package com.example.android.myapplication.utils.responses;
 
+import android.arch.lifecycle.LiveData;
+
 import com.example.android.myapplication.models.Movie;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,10 +1,8 @@
 package com.example.android.myapplication;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,11 +16,8 @@ import com.example.android.myapplication.database.AppDatabase;
 import com.example.android.myapplication.database.FavoriteMovieEntry;
 import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.requests.NetworkRequestGenerator;
-import com.example.android.myapplication.utils.MoviesApiJsonUtils;
-import com.example.android.myapplication.utils.NetworkUtils;
 import com.example.android.myapplication.utils.responses.MovieResponse;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private List<Movie> posterList;
 
     private AppDatabase mDatabase;
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,105 +68,30 @@ public class MainActivity extends AppCompatActivity
 
         mDatabase = AppDatabase.getInstance(getApplicationContext());
 
+        setupViewMainModel();
+
     }
 
     private void getMoviePoster(String queryMethod) {
 
         Log.d(TAG, "getMoviePoster: in");
 
-        if(queryMethod.equals("top_rated")) {
+        mainViewModel.getMoviesList(queryMethod);
 
-            getMovieByTopRated().enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-
-                    List<Movie> movies = response.body().getMovies();
-                    posterList = movies;
-                    mAdapter.setPosterListData(posterList);
-
-                    if(movies != null)
-                        Log.d(TAG, "onResponse: movies : " + movies.toString());
-                }
-
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                }
-            });
-
-        } else if(queryMethod.equals("popular")) {
-
-            getMovieByPopularity().enqueue(new Callback<MovieResponse>() {
-                @Override
-                public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
-                    List<Movie> movies = response.body().getMovies();
-                    posterList = movies;
-                    mAdapter.setPosterListData(posterList);
-
-                    if(movies != null)
-                        Log.d(TAG, "onResponse: movies : " + movies.toString());
-                }
-
-                @Override
-                public void onFailure(Call<MovieResponse> call, Throwable t) {
-
-                }
-            });
-        } else if(queryMethod.equals("favorites")) {
-
-            setupViewMainModel();
-
-        }
     }
 
     private void setupViewMainModel() {
-        MainViewModel mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        mainViewModel.getLists().observe(this, new Observer<List<FavoriteMovieEntry>>() {
+        mainViewModel.getMovieLists().observe(this, new Observer<List<Movie>>() {
             @Override
-            public void onChanged(@Nullable List<FavoriteMovieEntry> favoriteMovieEntries) {
+            public void onChanged(@Nullable List<Movie> movies) {
                 Log.d(TAG, "onChanged: Retrieving database update from LiveData in ViewModel");
-
-                if(favoriteMovieEntries != null)
-                    posterList = changeModel(favoriteMovieEntries);
-                    mAdapter.setPosterListData(posterList);
+                posterList = movies;
+                mAdapter.setPosterListData(posterList);
 
             }
         });
-    }
-
-    private List<Movie> changeModel(List<FavoriteMovieEntry> movieEntries) {
-
-        List<Movie> movieList = new ArrayList<>();
-
-        for(int i = 0; i< movieEntries.size(); i++) {
-            FavoriteMovieEntry movieEntry = movieEntries.get(i);
-
-            Movie movie = new Movie();
-            movie.setOriginal_title(movieEntry.getOriginal_title());
-            movie.setPoster_path(movieEntry.getPoster_path());
-            movie.setVote_average(movieEntry.getVote_average());
-            movie.setOverview(movieEntry.getOverview());
-            movie.setRelease_date(movieEntry.getRelease_date());
-
-            movieList.add(movie);
-        }
-
-        Log.d(TAG, "changeModel: movieList size : " + movieList.size());
-
-        return movieList;
-    }
-
-    private Call<MovieResponse> getMovieByTopRated() {
-        return NetworkRequestGenerator.getMoviesApi().getMovieByTopRated(
-                Constants.API_KEY
-        );
-    }
-
-    private Call<MovieResponse> getMovieByPopularity() {
-        return NetworkRequestGenerator.getMoviesApi().getMovieByPopularity(
-                Constants.API_KEY
-        );
     }
 
     @Override
