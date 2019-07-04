@@ -30,7 +30,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private Button mark_as_favorite;
 
     private Movie mMovie;
-    private FavoriteMovieEntry mFavoriteMovieEntry;
+    private LiveData<FavoriteMovieEntry> mFavoriteMovieEntry;
 
     private boolean isMarkedFavorite = false;
     private AppDatabase mDatabase;
@@ -50,18 +50,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         Log.d(TAG, "testLoadAll: in");
 
-                final LiveData<List<FavoriteMovieEntry>> list = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
+        final LiveData<List<FavoriteMovieEntry>> list = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
 
-                list.observe(this, new Observer<List<FavoriteMovieEntry>>() {
-                    @Override
-                    public void onChanged(@Nullable List<FavoriteMovieEntry> favoriteMovieEntries) {
-                        Log.d(TAG, "onChanged: Retrieving database update from LiveData");
+        list.observe(this, new Observer<List<FavoriteMovieEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<FavoriteMovieEntry> favoriteMovieEntries) {
+                Log.d(TAG, "onChanged: Retrieving database update from LiveData");
 
-                        for(int i = 0; i < favoriteMovieEntries.size(); i++) {
-                            System.out.println(favoriteMovieEntries.get(i).toString());
-                        }
-                    }
-                });
+                for(int i = 0; i < favoriteMovieEntries.size(); i++) {
+                    System.out.println(favoriteMovieEntries.get(i).toString());
+                }
+            }
+        });
     }
 
     /**
@@ -73,26 +73,23 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private void didUserMarkThisMovieAsFavorite() {
 
         if(mMovie != null) {
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+
+            mFavoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
+
+            mFavoriteMovieEntry.observe(this, new Observer<FavoriteMovieEntry>() {
                 @Override
-                public void run() {
-                    mFavoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
+                public void onChanged(@Nullable FavoriteMovieEntry movieEntry) {
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+                    if(movieEntry == null) {
+                        isMarkedFavorite = false;
+                    } else {
+                        isMarkedFavorite = true;
+                    }
 
-                            if(mFavoriteMovieEntry == null) {
-                                isMarkedFavorite = false;
-                                setMarkAsFavoriteBtn();
-                            } else {
-                                isMarkedFavorite = true;
-                                setMarkAsFavoriteBtn();
-                            }
-                        }
-                    });
+                    setMarkAsFavoriteBtn();
                 }
             });
+
         }
     }
 
@@ -168,7 +165,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     AppExecutors.getInstance().diskIO().execute(new Runnable() {
                         @Override
                         public void run() {
-                            FavoriteMovieEntry favoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
+                            FavoriteMovieEntry favoriteMovieEntry = mDatabase.favoriteMovieDao().getMovieByTitleForDelete(mMovie.getOriginal_title());
                             mDatabase.favoriteMovieDao().deleteFavoriteMovie(favoriteMovieEntry);
 
                             runOnUiThread(new Runnable() {

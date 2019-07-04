@@ -15,7 +15,10 @@ public interface FavoriteMovieDao {
     LiveData<List<FavoriteMovieEntry>> loadAllFavoriteMovies();
 
     @Query("SELECT * FROM favoriteMovie WHERE original_title = :title")
-    FavoriteMovieEntry getMovieByTitle(String title);
+    LiveData<FavoriteMovieEntry> getMovieByTitle(String title);
+
+    @Query("SELECT * FROM favoriteMovie WHERE original_title = :title")
+    FavoriteMovieEntry getMovieByTitleForDelete(String title);
 
     @Insert
     void insertFavoriteMovie(FavoriteMovieEntry movieEntry);
