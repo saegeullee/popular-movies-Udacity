@@ -13,17 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.myapplication.database.AppDatabase;
-import com.example.android.myapplication.database.FavoriteMovieEntry;
 import com.example.android.myapplication.models.Movie;
-import com.example.android.myapplication.requests.NetworkRequestGenerator;
-import com.example.android.myapplication.utils.responses.MovieResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements MovieThumbnailAdapter.OnItemClickListener {
@@ -50,10 +43,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate: in");
+
         setContentView(R.layout.activity_main);
 
         initUI();
-        getMoviePoster("popular");
+
     }
 
     private void initUI() {
@@ -81,9 +77,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupViewMainModel() {
+
+        Log.d(TAG, "setupViewMainModel: in ");
+
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        mainViewModel.getMovieLists().observe(this, new Observer<List<Movie>>() {
+        mainViewModel.movieListObserver().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 Log.d(TAG, "onChanged: Retrieving database update from LiveData in ViewModel");

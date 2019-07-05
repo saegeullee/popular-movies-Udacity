@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.myapplication.database.AppDatabase;
-import com.example.android.myapplication.database.FavoriteMovieEntry;
 import com.example.android.myapplication.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -51,7 +50,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private void setupViewModel() {
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mainViewModel.getMovieListsForTest().observe(this, new Observer<List<Movie>>() {
+        mainViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 Log.d(TAG, "onChanged: Retrieving database update from LiveData");
@@ -63,35 +62,36 @@ public class MovieDetailsActivity extends AppCompatActivity {
         });
 
         mainViewModel.getMoviesListTest();
+
+        mainViewModel.movieObserver().observe(this, new Observer<Movie>() {
+            @Override
+            public void onChanged(@Nullable Movie movie) {
+
+                if(movie == null) {
+                    isMarkedFavorite = false;
+                } else {
+                    isMarkedFavorite = true;
+                }
+
+                setMarkAsFavoriteBtn();
+            }
+        });
+
+        didUserMarkThisMovieAsFavorite();
     }
 
     /**
      * 현재 문제점
      * 메인액티비티에서 popular에서 details Activity 로 갔다가 메인으로
      * 되돌아오면 favorites 가 목록에 보인다.
+     *
      */
 
-//    private void didUserMarkThisMovieAsFavorite() {
-//
-//        if(mMovie != null) {
-//
-//            mFavoriteMovie = mDatabase.favoriteMovieDao().getMovieByTitle(mMovie.getOriginal_title());
-//
-//            mFavoriteMovie.observe(this, new Observer<Movie>() {
-//                @Override
-//                public void onChanged(@Nullable Movie movie) {
-//
-//                    if(movie == null) {
-//                        isMarkedFavorite = false;
-//                    } else {
-//                        isMarkedFavorite = true;
-//                    }
-//
-//                    setMarkAsFavoriteBtn();
-//                }
-//            });
-//        }
-//    }
+    private void didUserMarkThisMovieAsFavorite() {
+
+        if(mMovie != null)
+        mainViewModel.getMovieByTitle(mMovie.getOriginal_title());
+    }
 
 
     private void getIntentFromMainActivity() {
@@ -124,8 +124,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     .into(poster_image);
         }
 
-//        didUserMarkThisMovieAsFavorite();
-
         mark_as_favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,40 +135,21 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     Date date = new Date();
                     mMovie.setUpdatedAt(date);
 
-                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDatabase.favoriteMovieDao().insertFavoriteMovie(mMovie);
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    isMarkedFavorite = true;
-                                    setMarkAsFavoriteBtn();
-                                }
-                            });
-                        }
-                    });
+                    mainViewModel.insertFavoriteMovie(mMovie);
+                    isMarkedFavorite = true;
 
 
                 } else if(mMovie != null && isMarkedFavorite) {
 
-                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                        @Override
-                        public void run() {
+                    Date date = new Date();
+                    mMovie.setUpdatedAt(date);
 
-                            mDatabase.favoriteMovieDao().deleteFavoriteMovie(mMovie);
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    isMarkedFavorite = false;
-                                    setMarkAsFavoriteBtn();
-                                }
-                            });
-                        }
-                    });
+                    mainViewModel.unFavoriteMovie(mMovie);
+                    isMarkedFavorite = false;
                 }
+
+                setMarkAsFavoriteBtn();
+
             }
         });
     }

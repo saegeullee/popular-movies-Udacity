@@ -4,8 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.requests.MovieDataSourceClient;
 
@@ -19,26 +17,47 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
 
-        Log.d(TAG, "Actively retrieving the favorite movie lists from the Database");
         MovieDataSourceClient.getInstance().setContext(application);
-
+        getMoviesList("popular");
     }
 
-    public LiveData<List<Movie>> getMovieLists() {
-        return MovieDataSourceClient.getInstance().getMovieList();
+    public LiveData<List<Movie>> movieListObserver() {
+        lists = MovieDataSourceClient.getInstance().getMovieList();
+        return lists;
     }
 
     public void getMoviesList(String queryMethod) {
-        Log.d(TAG, "Actively retrieving the movie lists from the Api");
         MovieDataSourceClient.getInstance().getMovies(queryMethod);
     }
 
 
-    public LiveData<List<Movie>> getMovieListsForTest() {
+    public LiveData<Movie> movieObserver() {
+        return MovieDataSourceClient.getInstance().getMovie();
+    }
+
+    public void getMovieByTitle(String movieTitle) {
+        MovieDataSourceClient.getInstance().getMovieByTitle(movieTitle);
+
+    }
+
+
+    public void insertFavoriteMovie(final Movie movie) {
+
+        MovieDataSourceClient.getInstance().insertFavoriteMovie(movie);
+
+    }
+
+    public void unFavoriteMovie(final Movie movie) {
+
+        MovieDataSourceClient.getInstance().unFavoriteMovie(movie);
+    }
+
+    public LiveData<List<Movie>> movieListObserveTester() {
         return MovieDataSourceClient.getInstance().getTestMovieList();
     }
 
     public void getMoviesListTest() {
         MovieDataSourceClient.getInstance().getMovieListForTest();
     }
+
 }

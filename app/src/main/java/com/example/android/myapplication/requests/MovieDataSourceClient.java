@@ -23,6 +23,7 @@ public class MovieDataSourceClient {
 
     MutableLiveData<List<Movie>> mMovieList;
     MutableLiveData<List<Movie>> movieListForTest;
+    MutableLiveData<Movie> mMovie;
 
     private static MovieDataSourceClient instance;
     private AppDatabase mDatabase;
@@ -43,6 +44,7 @@ public class MovieDataSourceClient {
     public MovieDataSourceClient() {
         mMovieList = new MutableLiveData<>();
         movieListForTest = new MutableLiveData<>();
+        mMovie = new MutableLiveData<>();
         mDatabase = AppDatabase.getInstance(mContext);
     }
 
@@ -60,6 +62,7 @@ public class MovieDataSourceClient {
                     Log.d(TAG, "onResponse: in");
                     List<Movie> movieList = response.body().getMovies();
                     mMovieList.postValue(movieList);
+                    Log.d(TAG, "Actively retrieving the movie lists from the Api");
 
                     if(movieList != null)
                         Log.d(TAG, "onResponse: movies : " + mMovieList.toString());
@@ -81,6 +84,8 @@ public class MovieDataSourceClient {
                     List<Movie> movieList = response.body().getMovies();
                     Log.d(TAG, "onResponse: movieList " + movieList);
                     mMovieList.postValue(movieList);
+                    Log.d(TAG, "Actively retrieving the movie lists from the Api");
+
 
                     if(movieList != null)
                         Log.d(TAG, "onResponse: movies : " + movieList.toString());
@@ -95,15 +100,62 @@ public class MovieDataSourceClient {
 
         } else if(queryMethod.equals("favorites")) {
 
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    List<Movie> movieList = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
-                    mMovieList.postValue(movieList);
-                }
-            });
+            queryDatabaseLoadAllFavoriteMovies();
+
         }
     }
+
+    public LiveData<Movie> getMovie() {
+        return mMovie;
+    }
+
+    public void getMovieByTitle(final String movieTitle) {
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Movie movie = mDatabase.favoriteMovieDao().getMovieByTitle(movieTitle);
+                mMovie.postValue(movie);
+
+            }
+        });
+    }
+
+    public void insertFavoriteMovie(final Movie movie) {
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.favoriteMovieDao().insertFavoriteMovie(movie);
+            }
+        });
+    }
+
+    public void unFavoriteMovie(final Movie movie) {
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDatabase.favoriteMovieDao().deleteFavoriteMovie(movie);
+            }
+        });
+
+        queryDatabaseLoadAllFavoriteMovies();
+
+    }
+
+    public void queryDatabaseLoadAllFavoriteMovies() {
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Movie> movieList = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
+                Log.d(TAG, "Actively retrieving the favorite movie lists from the Room database");
+                mMovieList.postValue(movieList);
+            }
+        });
+    }
+
 
     public void getMovieListForTest() {
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
