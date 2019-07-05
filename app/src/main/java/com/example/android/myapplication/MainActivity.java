@@ -36,8 +36,6 @@ public class MainActivity extends AppCompatActivity
     private MovieThumbnailAdapter mAdapter;
 
     private List<Movie> posterList;
-
-    private AppDatabase mDatabase;
     private MainViewModel mainViewModel;
 
     @Override
@@ -59,10 +57,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new MovieThumbnailAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-
         posterList = new ArrayList<>();
-
-        mDatabase = AppDatabase.getInstance(getApplicationContext());
 
         setupViewMainModel();
 
