@@ -30,10 +30,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private Button mark_as_favorite;
 
     private Movie mMovie;
-    private LiveData<Movie> mFavoriteMovie;
 
     private boolean isMarkedFavorite = false;
-    private AppDatabase mDatabase;
     private MainViewModel mainViewModel;
 
     @Override
@@ -84,7 +82,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
      * 현재 문제점
      * 메인액티비티에서 popular에서 details Activity 로 갔다가 메인으로
      * 되돌아오면 favorites 가 목록에 보인다.
-     *
+     * -> 문제 해결
      */
 
     private void didUserMarkThisMovieAsFavorite() {
@@ -110,8 +108,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         plot_synopsis = findViewById(R.id.plot_synopsis);
         poster_image = findViewById(R.id.poster_image);
         mark_as_favorite = findViewById(R.id.mark_as_favorite);
-
-        mDatabase = AppDatabase.getInstance(getApplicationContext());
 
         if(mMovie != null) {
             setTitle(mMovie.getOriginal_title());
@@ -162,28 +158,5 @@ public class MovieDetailsActivity extends AppCompatActivity {
             mark_as_favorite.setText(R.string.mark_as_favorite);
             mark_as_favorite.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.temporary, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.delete:
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDatabase.favoriteMovieDao().deleteAllData();
-                    }
-                });
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
