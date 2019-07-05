@@ -17,21 +17,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MovieDataSourceClient {
+public class MovieRepository {
 
-    private static final String TAG = "MovieDataSourceClient";
+    private static final String TAG = "MovieRepository";
 
     MutableLiveData<List<Movie>> mMovieList;
     MutableLiveData<List<Movie>> movieListForTest;
     MutableLiveData<Movie> mMovie;
 
-    private static MovieDataSourceClient instance;
+    private static MovieRepository instance;
     private AppDatabase mDatabase;
     private Context mContext;
 
-    public static MovieDataSourceClient getInstance() {
+    public static MovieRepository getInstance() {
         if(instance == null) {
-            instance = new MovieDataSourceClient();
+            instance = new MovieRepository();
         }
 
         return instance;
@@ -41,7 +41,7 @@ public class MovieDataSourceClient {
         mContext = context;
     }
 
-    public MovieDataSourceClient() {
+    public MovieRepository() {
         mMovieList = new MutableLiveData<>();
         movieListForTest = new MutableLiveData<>();
         mMovie = new MutableLiveData<>();

@@ -5,7 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import com.example.android.myapplication.models.Movie;
-import com.example.android.myapplication.requests.MovieDataSourceClient;
+import com.example.android.myapplication.requests.MovieRepository;
 
 import java.util.List;
 
@@ -17,47 +17,47 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
 
-        MovieDataSourceClient.getInstance().setContext(application);
+        MovieRepository.getInstance().setContext(application);
         getMoviesList("popular");
     }
 
     public LiveData<List<Movie>> movieListObserver() {
-        lists = MovieDataSourceClient.getInstance().getMovieList();
+        lists = MovieRepository.getInstance().getMovieList();
         return lists;
     }
 
     public void getMoviesList(String queryMethod) {
-        MovieDataSourceClient.getInstance().getMovies(queryMethod);
+        MovieRepository.getInstance().getMovies(queryMethod);
     }
 
 
     public LiveData<Movie> movieObserver() {
-        return MovieDataSourceClient.getInstance().getMovie();
+        return MovieRepository.getInstance().getMovie();
     }
 
     public void getMovieByTitle(String movieTitle) {
-        MovieDataSourceClient.getInstance().getMovieByTitle(movieTitle);
+        MovieRepository.getInstance().getMovieByTitle(movieTitle);
 
     }
 
 
     public void insertFavoriteMovie(final Movie movie) {
 
-        MovieDataSourceClient.getInstance().insertFavoriteMovie(movie);
+        MovieRepository.getInstance().insertFavoriteMovie(movie);
 
     }
 
     public void unFavoriteMovie(final Movie movie) {
 
-        MovieDataSourceClient.getInstance().unFavoriteMovie(movie);
+        MovieRepository.getInstance().unFavoriteMovie(movie);
     }
 
     public LiveData<List<Movie>> movieListObserveTester() {
-        return MovieDataSourceClient.getInstance().getTestMovieList();
+        return MovieRepository.getInstance().getTestMovieList();
     }
 
     public void getMoviesListTest() {
-        MovieDataSourceClient.getInstance().getMovieListForTest();
+        MovieRepository.getInstance().getMovieListForTest();
     }
 
 }
