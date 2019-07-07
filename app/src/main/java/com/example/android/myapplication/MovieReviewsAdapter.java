@@ -16,13 +16,13 @@ public class MovieReviewsAdapter extends RecyclerView.Adapter<MovieReviewsAdapte
 
     private List<Review> mReviews;
     private Context mContext;
-    private ItemClickListener mItemClickListener;
+    private OnReviewItemClickListener mItemClickListener;
 
-    public interface ItemClickListener {
-        void onItemClicked(String itemId);
+    public interface OnReviewItemClickListener {
+        void onReviewItemClicked(String itemId);
     }
 
-    public MovieReviewsAdapter(Context context, ItemClickListener listener) {
+    public MovieReviewsAdapter(Context context, OnReviewItemClickListener listener) {
         mContext = context;
         mItemClickListener = listener;
     }
@@ -63,12 +63,13 @@ public class MovieReviewsAdapter extends RecyclerView.Adapter<MovieReviewsAdapte
             super(itemView);
             review_author = itemView.findViewById(R.id.review_author);
             review_content = itemView.findViewById(R.id.review_content);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             String reviewId = mReviews.get(getAdapterPosition()).getId();
-            mItemClickListener.onItemClicked(reviewId);
+            mItemClickListener.onReviewItemClicked(reviewId);
         }
     }
 }

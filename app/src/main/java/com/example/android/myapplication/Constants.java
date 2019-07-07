@@ -14,6 +14,8 @@ public class Constants {
     public final static String MOVIE_REVIEW_URL = "reviews";
     public final static String MOVIE_VIDEOS_URL = "videos";
 
+    public final static String YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v=";
+
 
 
     public final static String MOVIE_TOP_RATED = MOVIE_URL + "/top_rated" + API_PARAM + API_KEY;

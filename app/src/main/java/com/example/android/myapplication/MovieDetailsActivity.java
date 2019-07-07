@@ -1,22 +1,20 @@
 package com.example.android.myapplication;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.android.myapplication.database.AppDatabase;
 import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.models.MovieTrailer;
 import com.example.android.myapplication.models.Review;
@@ -26,8 +24,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MovieDetailsActivity extends AppCompatActivity
-        implements MovieReviewsAdapter.ItemClickListener,
-        MovieTrailersAdapter.OnItemClickListener {
+        implements MovieReviewsAdapter.OnReviewItemClickListener,
+        MovieTrailersAdapter.OnTrailerItemClickListener {
 
     private static final String TAG = "MovieDetailsActivity";
 
@@ -225,12 +223,15 @@ public class MovieDetailsActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemClicked(String itemId) {
+    public void onTrailerItemClicked(String key) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.YOUTUBE_VIDEO_URL + key));
+        startActivity(intent);
 
     }
 
     @Override
-    public void onItemClicked(int position) {
+    public void onReviewItemClicked(String itemId) {
 
     }
 }

@@ -14,13 +14,13 @@ import java.util.List;
 public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieTrailersAdapter.TrailerViewHolder> {
 
     private List<MovieTrailer> mTrailersList;
-    private OnItemClickListener mListener;
+    private OnTrailerItemClickListener mListener;
 
-    public interface OnItemClickListener {
-        void onItemClicked(int position);
+    public interface OnTrailerItemClickListener {
+        void onTrailerItemClicked(String key);
     }
 
-    public MovieTrailersAdapter(OnItemClickListener listener) {
+    public MovieTrailersAdapter(OnTrailerItemClickListener listener) {
         mListener = listener;
     }
 
@@ -60,13 +60,14 @@ public class MovieTrailersAdapter extends RecyclerView.Adapter<MovieTrailersAdap
             super(itemView);
 
             trailerName = itemView.findViewById(R.id.trailerName);
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
 
-            int position = getAdapterPosition();
-            mListener.onItemClicked(position);
+            String key = mTrailersList.get(getAdapterPosition()).getKey();
+            mListener.onTrailerItemClicked(key);
 
         }
     }
