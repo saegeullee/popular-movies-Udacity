@@ -78,7 +78,7 @@ public class MovieRepository {
                     Log.d(TAG, "onResponse: in");
                     List<Movie> movieList = response.body().getMovies();
                     mMovieList.postValue(movieList);
-                    Log.d(TAG, "Actively retrieving the movie lists from the Api");
+                    Log.d(TAG, "Actively retrieving the movie top rated lists from the Api");
 
                     if(movieList != null)
                         Log.d(TAG, "onResponse: movies : " + mMovieList.toString());
@@ -100,7 +100,7 @@ public class MovieRepository {
                     List<Movie> movieList = response.body().getMovies();
                     Log.d(TAG, "onResponse: movieList " + movieList);
                     mMovieList.postValue(movieList);
-                    Log.d(TAG, "Actively retrieving the movie lists from the Api");
+                    Log.d(TAG, "Actively retrieving the movie popular lists from the Api");
 
 
                     if(movieList != null)

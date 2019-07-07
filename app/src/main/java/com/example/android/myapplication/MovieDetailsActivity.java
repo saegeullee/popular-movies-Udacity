@@ -60,10 +60,9 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     private void setupViewModel() {
 
-        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         movieDetailsViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
 
-        mainViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
+        movieDetailsViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 Log.d(TAG, "onChanged: Retrieving database update from LiveData");
@@ -74,9 +73,9 @@ public class MovieDetailsActivity extends AppCompatActivity
             }
         });
 
-        mainViewModel.getMoviesListTest();
+        movieDetailsViewModel.getMoviesListTest();
 
-        mainViewModel.movieObserver().observe(this, new Observer<Movie>() {
+        movieDetailsViewModel.movieObserver().observe(this, new Observer<Movie>() {
             @Override
             public void onChanged(@Nullable Movie movie) {
 
@@ -126,7 +125,7 @@ public class MovieDetailsActivity extends AppCompatActivity
     private void didUserMarkThisMovieAsFavorite() {
 
         if(mMovie != null)
-        mainViewModel.getMovieByTitle(mMovie.getOriginal_title());
+        movieDetailsViewModel.getMovieByTitle(mMovie.getOriginal_title());
     }
 
 
@@ -182,7 +181,7 @@ public class MovieDetailsActivity extends AppCompatActivity
                     Date date = new Date();
                     mMovie.setUpdatedAt(date);
 
-                    mainViewModel.insertFavoriteMovie(mMovie);
+                    movieDetailsViewModel.insertFavoriteMovie(mMovie);
                     isMarkedFavorite = true;
 
 
@@ -191,7 +190,7 @@ public class MovieDetailsActivity extends AppCompatActivity
                     Date date = new Date();
                     mMovie.setUpdatedAt(date);
 
-                    mainViewModel.unFavoriteMovie(mMovie);
+                    movieDetailsViewModel.unFavoriteMovie(mMovie);
                     isMarkedFavorite = false;
                 }
 

@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
+import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.models.MovieTrailer;
 import com.example.android.myapplication.models.Review;
 import com.example.android.myapplication.requests.MovieRepository;
@@ -36,6 +37,35 @@ public class MovieDetailsViewModel extends AndroidViewModel {
 
     public void getMovieTrailers(String movieId) {
         MovieRepository.getInstance().getMovieTrailersFromSource(movieId);
+    }
+
+    public LiveData<Movie> movieObserver() {
+        return MovieRepository.getInstance().getMovie();
+    }
+
+    public void getMovieByTitle(String movieTitle) {
+        MovieRepository.getInstance().getMovieByTitle(movieTitle);
+
+    }
+
+
+    public void insertFavoriteMovie(final Movie movie) {
+
+        MovieRepository.getInstance().insertFavoriteMovie(movie);
+
+    }
+
+    public void unFavoriteMovie(final Movie movie) {
+
+        MovieRepository.getInstance().unFavoriteMovie(movie);
+    }
+
+    public LiveData<List<Movie>> movieListObserveTester() {
+        return MovieRepository.getInstance().getTestMovieList();
+    }
+
+    public void getMoviesListTest() {
+        MovieRepository.getInstance().getMovieListForTest();
     }
 
 }

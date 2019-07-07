@@ -4,6 +4,8 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.example.android.myapplication.models.Movie;
 import com.example.android.myapplication.models.Review;
 import com.example.android.myapplication.requests.MovieRepository;
@@ -18,6 +20,7 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        Log.d(TAG, "MainViewModel: in");
 
         MovieRepository.getInstance().setContext(application);
         MovieRepository.getInstance().setDatabase();
@@ -30,37 +33,8 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void getMoviesList(String queryMethod) {
+        Log.d(TAG, "getMoviesList: in");
         MovieRepository.getInstance().getMoviesFromSource(queryMethod);
-    }
-
-
-    public LiveData<Movie> movieObserver() {
-        return MovieRepository.getInstance().getMovie();
-    }
-
-    public void getMovieByTitle(String movieTitle) {
-        MovieRepository.getInstance().getMovieByTitle(movieTitle);
-
-    }
-
-
-    public void insertFavoriteMovie(final Movie movie) {
-
-        MovieRepository.getInstance().insertFavoriteMovie(movie);
-
-    }
-
-    public void unFavoriteMovie(final Movie movie) {
-
-        MovieRepository.getInstance().unFavoriteMovie(movie);
-    }
-
-    public LiveData<List<Movie>> movieListObserveTester() {
-        return MovieRepository.getInstance().getTestMovieList();
-    }
-
-    public void getMoviesListTest() {
-        MovieRepository.getInstance().getMovieListForTest();
     }
 
 }
