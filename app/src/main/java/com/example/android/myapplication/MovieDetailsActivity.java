@@ -32,13 +32,13 @@ public class MovieDetailsActivity extends AppCompatActivity
     private static final String TAG = "MovieDetailsActivity";
 
     private TextView release_date, vote_average, plot_synopsis;
+    private TextView no_trailers, no_reviews;
     private ImageView poster_image;
     private Button mark_as_favorite;
 
     private Movie mMovie;
 
     private boolean isMarkedFavorite = false;
-    private MainViewModel mainViewModel;
     private MovieDetailsViewModel movieDetailsViewModel;
 
     private RecyclerView reviewRecyclerView;
@@ -97,6 +97,11 @@ public class MovieDetailsActivity extends AppCompatActivity
                 @Override
                 public void onChanged(@Nullable List<Review> reviews) {
                     Log.d(TAG, "onChanged: reviews : " + reviews.toString());
+                    if(reviews.size() == 0) {
+                        no_reviews.setVisibility(View.VISIBLE);
+                    } else {
+                        no_reviews.setVisibility(View.GONE);
+                    }
                     mReviewAdapter.setReviews(reviews);
                 }
             });
@@ -107,6 +112,12 @@ public class MovieDetailsActivity extends AppCompatActivity
                 @Override
                 public void onChanged(@Nullable List<MovieTrailer> movieTrailers) {
                     Log.d(TAG, "onChanged: trailers : " + movieTrailers.toString());
+
+                    if(movieTrailers.size() == 0) {
+                        no_trailers.setVisibility(View.VISIBLE);
+                    } else {
+                        no_trailers.setVisibility(View.GONE);
+                    }
                     mTrailerAdapter.setTrailerList(movieTrailers);
                 }
             });
@@ -145,6 +156,9 @@ public class MovieDetailsActivity extends AppCompatActivity
         plot_synopsis = findViewById(R.id.plot_synopsis);
         poster_image = findViewById(R.id.poster_image);
         mark_as_favorite = findViewById(R.id.mark_as_favorite);
+
+        no_reviews = findViewById(R.id.noReviewNoticeText);
+        no_trailers = findViewById(R.id.noTrailersNoticeText);
 
         reviewRecyclerView = findViewById(R.id.reviewsRecyclerView);
         reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));

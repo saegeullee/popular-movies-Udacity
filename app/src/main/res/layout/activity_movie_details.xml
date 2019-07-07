@@ -101,6 +101,15 @@
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
+        <TextView
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_trailers"
+            android:id="@+id/noTrailersNoticeText"
+            />
+
         <android.support.v7.widget.RecyclerView
 
             android:id="@+id/trailerRecyclerView"
@@ -124,6 +133,15 @@
             android:text="@string/reviews"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
+
+        <TextView
+            android:visibility="gone"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_reviews"
+            android:id="@+id/noReviewNoticeText"
+            />
 
         <android.support.v7.widget.RecyclerView
             android:layout_marginTop="10dp"
