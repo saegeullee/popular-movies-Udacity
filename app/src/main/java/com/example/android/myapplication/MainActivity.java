@@ -19,6 +19,12 @@ import com.example.android.myapplication.models.Movie;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 2019-07-07 7:34pm
+ * 현재 문제점 : 메인 액티비티에서 top rated 의 영화 목록에서 하나의 영화를 클릭후 다시 메인액티비티로
+ * 되돌아오면 popular 영화 목록으로 바뀐다.
+ */
+
 public class MainActivity extends AppCompatActivity
         implements MovieThumbnailAdapter.OnItemClickListener{
 
