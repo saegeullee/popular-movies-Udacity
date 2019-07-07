@@ -14,7 +14,6 @@ import java.util.List;
 public class MainViewModel extends AndroidViewModel {
 
     private LiveData<List<Movie>> lists;
-    private LiveData<List<Review>> reviews;
     private static final String TAG = "MainViewModel";
 
     public MainViewModel(@NonNull Application application) {
@@ -23,15 +22,6 @@ public class MainViewModel extends AndroidViewModel {
         MovieRepository.getInstance().setContext(application);
         MovieRepository.getInstance().setDatabase();
         getMoviesList("popular");
-    }
-
-    public LiveData<List<Review>> movieReviewsObserver() {
-        reviews = MovieRepository.getInstance().getReviews();
-        return reviews;
-    }
-
-    public void getReviews(String movieId) {
-        MovieRepository.getInstance().getReviewsFromSource(movieId);
     }
 
     public LiveData<List<Movie>> movieListObserver() {

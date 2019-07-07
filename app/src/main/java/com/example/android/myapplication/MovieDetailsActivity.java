@@ -37,6 +37,7 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     private boolean isMarkedFavorite = false;
     private MainViewModel mainViewModel;
+    private MovieDetailsViewModel movieDetailsViewModel;
 
     private RecyclerView reviewRecyclerView;
     private MovieReviewsAdapter mReviewAdapter;
@@ -55,6 +56,8 @@ public class MovieDetailsActivity extends AppCompatActivity
     private void setupViewModel() {
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        movieDetailsViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
+
         mainViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
@@ -85,7 +88,8 @@ public class MovieDetailsActivity extends AppCompatActivity
         didUserMarkThisMovieAsFavorite();
 
         if(mMovie != null) {
-            mainViewModel.movieReviewsObserver().observe(this, new Observer<List<Review>>() {
+
+            movieDetailsViewModel.movieReviewsObserver().observe(this, new Observer<List<Review>>() {
                 @Override
                 public void onChanged(@Nullable List<Review> reviews) {
                     Log.d(TAG, "onChanged: reviews : " + reviews.toString());
@@ -93,7 +97,7 @@ public class MovieDetailsActivity extends AppCompatActivity
                 }
             });
 
-            mainViewModel.getReviews(mMovie.getMovieId());
+            movieDetailsViewModel.getReviews(mMovie.getMovieId());
         }
     }
 
