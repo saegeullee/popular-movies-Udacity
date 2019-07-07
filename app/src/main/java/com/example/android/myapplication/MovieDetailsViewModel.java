@@ -64,12 +64,4 @@ public class MovieDetailsViewModel extends ViewModel {
         MovieRepository.getInstance().unFavoriteMovie(movie);
     }
 
-    public LiveData<List<Movie>> movieListObserveTester() {
-        return MovieRepository.getInstance().getTestMovieList();
-    }
-
-    public void getMoviesListTest() {
-        MovieRepository.getInstance().getMovieListForTest();
-    }
-
 }

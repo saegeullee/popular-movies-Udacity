@@ -73,19 +73,6 @@ public class MovieDetailsActivity extends AppCompatActivity
             MovieDetailsViewModelFactory factory = new MovieDetailsViewModelFactory(this, mMovie.getMovieId());
             movieDetailsViewModel = ViewModelProviders.of(this, factory).get(MovieDetailsViewModel.class);
 
-            movieDetailsViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
-                @Override
-                public void onChanged(@Nullable List<Movie> movies) {
-                    Log.d(TAG, "onChanged: Retrieving database update from LiveData");
-
-                    for (int i = 0; i < movies.size(); i++) {
-                        System.out.println(movies.get(i).toString());
-                    }
-                }
-            });
-
-            movieDetailsViewModel.getMoviesListTest();
-
             movieDetailsViewModel.movieObserver().observe(this, new Observer<Movie>() {
                 @Override
                 public void onChanged(@Nullable Movie movie) {

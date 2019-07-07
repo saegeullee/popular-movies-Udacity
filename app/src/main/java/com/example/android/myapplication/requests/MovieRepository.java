@@ -26,7 +26,6 @@ public class MovieRepository {
     private static final String TAG = "MovieRepository";
 
     MutableLiveData<List<Movie>> mMovieList;
-    MutableLiveData<List<Movie>> movieListForTest;
     MutableLiveData<List<Review>> mMovieReviews;
     MutableLiveData<List<MovieTrailer>> mMovieTrailers;
     MutableLiveData<Movie> mMovie;
@@ -58,7 +57,6 @@ public class MovieRepository {
 
     public MovieRepository() {
         mMovieList = new MutableLiveData<>();
-        movieListForTest = new MutableLiveData<>();
         mMovie = new MutableLiveData<>();
         mMovieReviews = new MutableLiveData<>();
         mMovieTrailers = new MutableLiveData<>();
@@ -196,6 +194,7 @@ public class MovieRepository {
                 mDatabase.favoriteMovieDao().insertFavoriteMovie(movie);
             }
         });
+
     }
 
     public void unFavoriteMovie(final Movie movie) {
@@ -223,20 +222,6 @@ public class MovieRepository {
         });
     }
 
-
-    public void getMovieListForTest() {
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<Movie> movieList = mDatabase.favoriteMovieDao().loadAllFavoriteMovies();
-                movieListForTest.postValue(movieList);
-            }
-        });
-    }
-
-    public LiveData<List<Movie>> getTestMovieList() {
-        return movieListForTest;
-    }
 
     public LiveData<List<Movie>> getMovieList() {
         return mMovieList;
