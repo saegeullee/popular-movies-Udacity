@@ -6,6 +6,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,12 +18,14 @@ import android.widget.TextView;
 
 import com.example.android.myapplication.database.AppDatabase;
 import com.example.android.myapplication.models.Movie;
+import com.example.android.myapplication.models.Review;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity
+        implements MovieReviewsAdapter.ItemClickListener {
 
     private static final String TAG = "MovieDetailsActivity";
 
@@ -33,6 +37,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private boolean isMarkedFavorite = false;
     private MainViewModel mainViewModel;
+
+    private RecyclerView reviewRecyclerView;
+    private MovieReviewsAdapter mReviewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +83,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
         });
 
         didUserMarkThisMovieAsFavorite();
+
+        if(mMovie != null) {
+            mainViewModel.movieReviewsObserver().observe(this, new Observer<List<Review>>() {
+                @Override
+                public void onChanged(@Nullable List<Review> reviews) {
+                    Log.d(TAG, "onChanged: reviews : " + reviews.toString());
+                    mReviewAdapter.setReviews(reviews);
+                }
+            });
+
+            mainViewModel.getReviews(mMovie.getMovieId());
+        }
     }
 
     /**
@@ -108,6 +127,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         plot_synopsis = findViewById(R.id.plot_synopsis);
         poster_image = findViewById(R.id.poster_image);
         mark_as_favorite = findViewById(R.id.mark_as_favorite);
+
+        reviewRecyclerView = findViewById(R.id.reviewsRecyclerView);
+        reviewRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reviewRecyclerView.setNestedScrollingEnabled(false);
+        mReviewAdapter = new MovieReviewsAdapter(this, this);
+        reviewRecyclerView.setAdapter(mReviewAdapter);
 
         if(mMovie != null) {
             setTitle(mMovie.getOriginal_title());
@@ -158,5 +183,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
             mark_as_favorite.setText(R.string.mark_as_favorite);
             mark_as_favorite.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
+    }
+
+    @Override
+    public void onItemClicked(String itemId) {
+
     }
 }

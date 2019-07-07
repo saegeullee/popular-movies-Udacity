@@ -5,20 +5,33 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import com.example.android.myapplication.models.Movie;
+import com.example.android.myapplication.models.Review;
 import com.example.android.myapplication.requests.MovieRepository;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
 
     private LiveData<List<Movie>> lists;
+    private LiveData<List<Review>> reviews;
     private static final String TAG = "MainViewModel";
 
     public MainViewModel(@NonNull Application application) {
         super(application);
 
         MovieRepository.getInstance().setContext(application);
+        MovieRepository.getInstance().setDatabase();
         getMoviesList("popular");
+    }
+
+    public LiveData<List<Review>> movieReviewsObserver() {
+        reviews = MovieRepository.getInstance().getReviews();
+        return reviews;
+    }
+
+    public void getReviews(String movieId) {
+        MovieRepository.getInstance().getReviewsFromSource(movieId);
     }
 
     public LiveData<List<Movie>> movieListObserver() {
@@ -27,7 +40,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void getMoviesList(String queryMethod) {
-        MovieRepository.getInstance().getMovies(queryMethod);
+        MovieRepository.getInstance().getMoviesFromSource(queryMethod);
     }
 
 

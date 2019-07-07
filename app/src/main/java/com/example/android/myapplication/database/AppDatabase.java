@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.example.android.myapplication.models.Movie;
 
-@Database(entities = {Movie.class}, version = 1, exportSchema = false)
+@Database(entities = {Movie.class}, version = 2, exportSchema = false)
 @TypeConverters(DateConverter.class)
 abstract public class AppDatabase extends RoomDatabase {
 
@@ -25,6 +25,7 @@ abstract public class AppDatabase extends RoomDatabase {
                 Log.d(TAG, "getInstance: Creating new db instance");
                 dbInstance = Room.databaseBuilder(context.getApplicationContext(),
                         AppDatabase.class, AppDatabase.DATABASE_NAME)
+                        .fallbackToDestructiveMigration()
                         .build();
             }
         }

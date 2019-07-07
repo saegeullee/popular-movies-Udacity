@@ -11,6 +11,8 @@ public class Constants {
 
     public final static String MOVIE_TOP_RATED_URL = "top_rated";
     public final static String MOVIE_POPULAR_URL = "popular";
+    public final static String MOVIE_REVIEW_URL = "reviews";
+
 
     public final static String MOVIE_TOP_RATED = MOVIE_URL + "/top_rated" + API_PARAM + API_KEY;
     public final static String MOVIE_POPULAR = MOVIE_URL + "/popular" + API_PARAM + API_KEY;

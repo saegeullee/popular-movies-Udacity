@@ -9,7 +9,9 @@ import com.example.android.myapplication.AppExecutors;
 import com.example.android.myapplication.Constants;
 import com.example.android.myapplication.database.AppDatabase;
 import com.example.android.myapplication.models.Movie;
+import com.example.android.myapplication.models.Review;
 import com.example.android.myapplication.utils.responses.MovieResponse;
+import com.example.android.myapplication.utils.responses.ReviewResponse;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class MovieRepository {
 
     MutableLiveData<List<Movie>> mMovieList;
     MutableLiveData<List<Movie>> movieListForTest;
+    MutableLiveData<List<Review>> mMovieReviews;
     MutableLiveData<Movie> mMovie;
 
     private static MovieRepository instance;
@@ -41,17 +44,26 @@ public class MovieRepository {
         mContext = context;
     }
 
+    public void setDatabase() {
+        if(mContext != null) {
+            mDatabase = AppDatabase.getInstance(mContext);
+            Log.d(TAG, "MovieRepository: DB created");
+        } else {
+            Log.d(TAG, "MovieRepository: DB is not instantiated");
+        }
+    }
+
     public MovieRepository() {
         mMovieList = new MutableLiveData<>();
         movieListForTest = new MutableLiveData<>();
         mMovie = new MutableLiveData<>();
-        mDatabase = AppDatabase.getInstance(mContext);
+        mMovieReviews = new MutableLiveData<>();
     }
 
-    public void getMovies(String queryMethod) {
+    public void getMoviesFromSource(String queryMethod) {
 
-        Log.d(TAG, "getMovies: in");
-        Log.d(TAG, "getMovies: querymethod : " + queryMethod);
+        Log.d(TAG, "getMoviesFromSource: in");
+        Log.d(TAG, "getMoviesFromSource: querymethod : " + queryMethod);
 
         if(queryMethod.equals("top_rated")) {
 
@@ -103,6 +115,32 @@ public class MovieRepository {
             queryDatabaseLoadAllFavoriteMovies();
 
         }
+    }
+
+    public void getReviewsFromSource(String movieId) {
+
+        getMovieReviews(movieId).enqueue(new Callback<ReviewResponse>() {
+            @Override
+            public void onResponse(Call<ReviewResponse> call, Response<ReviewResponse> response) {
+                Log.d(TAG, "onResponse: in");
+                List<Review> reviewList = response.body().getReviews();
+                Log.d(TAG, "onResponse: number of reviews : " + reviewList.size());
+                Log.d(TAG, "onResponse: reviewList : " + reviewList);
+                mMovieReviews.postValue(reviewList);
+                Log.d(TAG, "Actively retrieving the movie reviews from the Api");
+
+            }
+
+            @Override
+            public void onFailure(Call<ReviewResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+    }
+
+    public LiveData<List<Review>> getReviews() {
+        return mMovieReviews;
     }
 
     public LiveData<Movie> getMovie() {
@@ -185,5 +223,10 @@ public class MovieRepository {
         return NetworkRequestGenerator.getMoviesApi().getMovieByPopularity(
                 Constants.API_KEY
         );
+    }
+
+    private Call<ReviewResponse> getMovieReviews(String movieId) {
+        return NetworkRequestGenerator.getMoviesApi().getMovieReviews(
+                movieId, Constants.API_KEY);
     }
 }

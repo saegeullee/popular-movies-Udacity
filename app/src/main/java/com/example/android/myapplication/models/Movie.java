@@ -7,14 +7,18 @@ import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
-import java.util.List;
 
 @Entity(tableName = "Movie")
 public class Movie implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    private int pk_id;
+
+    @SerializedName("id")
+    private String movieId;
     private String original_title; //overview
     private String poster_path;
     private String overview;
@@ -24,12 +28,14 @@ public class Movie implements Parcelable {
     @ColumnInfo(name="updated_at")
     private Date updatedAt;
 
+    @Ignore
     public Movie() {
     }
 
     // Use this constructor when add new favorite movie to DB
     @Ignore
-    public Movie(String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
+    public Movie(String movieId, String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
+        this.movieId = movieId;
         this.original_title = original_title;
         this.poster_path = poster_path;
         this.overview = overview;
@@ -39,8 +45,11 @@ public class Movie implements Parcelable {
     }
 
     // Use this constructor when read from DB
-    public Movie(int id, String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
-        this.id = id;
+
+
+    public Movie(int pk_id, String movieId, String original_title, String poster_path, String overview, double vote_average, String release_date, Date updatedAt) {
+        this.pk_id = pk_id;
+        this.movieId = movieId;
         this.original_title = original_title;
         this.poster_path = poster_path;
         this.overview = overview;
@@ -50,7 +59,8 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(Parcel in) {
-        id = in.readInt();
+        pk_id = in.readInt();
+        movieId = in.readString();
         original_title = in.readString();
         poster_path = in.readString();
         overview = in.readString();
@@ -118,12 +128,34 @@ public class Movie implements Parcelable {
         this.updatedAt = updatedAt;
     }
 
-    public int getId() {
-        return id;
+    public String getMovieId() {
+        return movieId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
+
+    public int getPk_id() {
+        return pk_id;
+    }
+
+    public void setPk_id(int pk_id) {
+        this.pk_id = pk_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "pk_id=" + pk_id +
+                ", movieId='" + movieId + '\'' +
+                ", original_title='" + original_title + '\'' +
+                ", poster_path='" + poster_path + '\'' +
+                ", overview='" + overview + '\'' +
+                ", vote_average=" + vote_average +
+                ", release_date='" + release_date + '\'' +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 
     @Override
@@ -133,24 +165,12 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(pk_id);
+        dest.writeString(movieId);
         dest.writeString(original_title);
         dest.writeString(poster_path);
         dest.writeString(overview);
         dest.writeDouble(vote_average);
         dest.writeString(release_date);
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", original_title='" + original_title + '\'' +
-                ", poster_path='" + poster_path + '\'' +
-                ", overview='" + overview + '\'' +
-                ", vote_average=" + vote_average +
-                ", release_date='" + release_date + '\'' +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }
