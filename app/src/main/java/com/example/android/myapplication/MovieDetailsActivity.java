@@ -23,6 +23,12 @@ import com.squareup.picasso.Picasso;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Problem
+ * 현재 이 액티비티에서 rotation 을 돌리면 api 호출을 다시 해서 데이터를 가져온다.
+ * 그럼 viewModel 을 사용하는 이유가 사라진다.
+ */
+
 public class MovieDetailsActivity extends AppCompatActivity
         implements MovieReviewsAdapter.OnReviewItemClickListener,
         MovieTrailersAdapter.OnTrailerItemClickListener {
