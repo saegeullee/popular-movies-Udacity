@@ -1,0 +1,197 @@
+[33mcommit 57fa57cc368d31ca3f8233e63864bdd45497f497[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 23:14:34 2019 +0900
+
+    Problem at MovieDetailsActivity reported. This activity doesn't use the advantage of viewModel
+
+[33mcommit d8b31e505990d3650f3dc1a2a7862c099deb9d65[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 23:13:48 2019 +0900
+
+    give more space at the bottom of review row
+
+[33mcommit ab975c910b212767e3325c9d154e3afedb164893[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 22:52:37 2019 +0900
+
+    Trailer Video Play implemented
+
+[33mcommit 1ae5a9d176cde1ea4499ab0a3db51b80cdc6ad13[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 22:37:50 2019 +0900
+
+    Implemented noticing no trailers and no reviews of the certain movie
+
+[33mcommit d77950a6f1631e59541c398ad85527381463da47[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 21:44:10 2019 +0900
+
+    MainActivity movie list error fixed by eliminate mainViewModel instance at MovieDetailsActivity
+
+[33mcommit 1e5f754041e48eb9bac71d4060eb446487e117ed[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 19:36:38 2019 +0900
+
+    MainActivity movie list error reported
+
+[33mcommit 98fa4b57a4e79e9210bf1d9f80c58bf67acebcc5[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 19:31:07 2019 +0900
+
+    Get Movie Trailers from Rest api and set it on the MovieDetailsActivity Completed
+
+[33mcommit c83fbfa005c00bd46a71d2e74c3f9970fbfb75f9[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 18:17:19 2019 +0900
+
+    Created MovieDetailsViewModel and moved necessary variables and methods to here
+
+[33mcommit 288ae3f90495dd15990e2dc722417750d577e885[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sun Jul 7 18:04:27 2019 +0900
+
+    Implemented Reviews of the Movies in MovieDetailsActivity
+
+[33mcommit 3846d6f9ca8752857e53f3dca0a42f8b0f541da7[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Jul 5 23:28:48 2019 +0900
+
+    class name changed to MovieRepository
+
+[33mcommit b07b7f62787f3c4e3febb674ba5f8fa7f64d1e3e[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Jul 5 23:16:54 2019 +0900
+
+    changed class name to MovieRepository
+
+[33mcommit ca219b7ba878c49574d9f33f23df9880a7439531[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Jul 5 21:45:53 2019 +0900
+
+    unnecessary variables removed
+
+[33mcommit 287cd187af097b6540804498a9b92ab12f8d5ab4[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Jul 5 21:24:03 2019 +0900
+
+    unnecessary variables methods romoved
+
+[33mcommit c4a2ff9fedf8746a734bef3f2fa26a6763814976[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Jul 5 21:19:42 2019 +0900
+
+    ViewModel implementation done
+
+[33mcommit 68bfc59b6cbef04029a78620a7a46656edbe39f8[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Jul 5 00:06:06 2019 +0900
+
+    Integrated Movie Data Source done
+
+[33mcommit d272cc57f222de6a082817cb741a1f659500171a[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Thu Jul 4 19:16:15 2019 +0900
+
+    Implemented ViewModel done
+
+[33mcommit dd985e952afaa83385b60b5c88e8a69c8d2c75e1[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Thu Jul 4 00:05:07 2019 +0900
+
+    LiveData Implemented
+
+[33mcommit ccf5916ef9f506935f2e82ccda1742d42745bf10[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Wed Jul 3 23:12:32 2019 +0900
+
+    Implement Room database queries through other Thread(AppExecutors
+
+[33mcommit deafcb0c9a241e0d8db5b6bbd66590fa52e1bee3[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Wed Jul 3 21:59:00 2019 +0900
+
+    Get favorite Movie list at MainActivity done
+
+[33mcommit 992cf8db3916dd36a5744182f60292403f412a25[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Wed Jul 3 21:40:10 2019 +0900
+
+    Room Database Mark Movie favorite and unfavorite done
+
+[33mcommit 5f97f1f44a99b54cf9cfebbc5aed9e8125eb1a56[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Wed Jul 3 18:14:48 2019 +0900
+
+    Room Database set
+
+[33mcommit 30d1961a0d40e2d5ffd7a1bd02612211ff34d429[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Wed Jul 3 16:50:17 2019 +0900
+
+    global posterList null error fixed
+
+[33mcommit 102711ff261d91e4fc456c32b21d7be968b8d576[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Wed Jul 3 16:47:29 2019 +0900
+
+    getMoviePost method completed
+
+[33mcommit 5338d95b2bf3b9cfb9e5e2bedb4689b5c9c130be[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Mon May 27 21:30:57 2019 +0900
+
+    Retrofit implemented successfully ( response comes in from api)
+
+[33mcommit d3e77c0d5d47946410d5c7f736fb2f2db1b15457[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Mon May 27 18:32:07 2019 +0900
+
+    Popular Movies 2 starts , VideoTrailer, Review Model added, Retrofit implemented
+
+[33mcommit b37f272358c13157bc8225237468e14bf1a0fe79[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sat Apr 27 20:44:20 2019 +0900
+
+    MainActivity Menu added, and queryMethods implemented
+
+[33mcommit ce558bc8300d65b0219058f35cb0a5309d321451[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sat Apr 27 20:28:29 2019 +0900
+
+    activity_movie_details.xml changed text to string resource
+
+[33mcommit fc3f01f40f8e577a634f42ba52cb23fe0c03ca69[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sat Apr 27 20:26:00 2019 +0900
+
+    MovieDetailsActivity Completed
+
+[33mcommit 77fe0e8724667fcc60be49b3e24b70baa8887cab[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sat Apr 27 20:07:42 2019 +0900
+
+    MovieDetailsActivity created, navigate to MovieDetailActivity when item clicked Completed
+
+[33mcommit fc2249be7bda6f80a6c799a10698b599ea7da35d[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sat Apr 27 18:55:14 2019 +0900
+
+    image path changed to https from http and not it works
+
+[33mcommit 9c947efb20e791c06598142c3197093219418a7b[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Sat Apr 27 18:34:21 2019 +0900
+
+    Get Json data from Api Completed, show the data in MainActivity Completed
+
+[33mcommit 44b007346320450d875a152c7be9c8f8d9b2948a[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Apr 26 17:44:19 2019 +0900
+
+    Initial work done (MovieThumbnailAdapter, Constants, Poster Pojo, movie_poster_item.xml etc)
+
+[33mcommit 1077b4b35b75152901f7887e6f156e78a0a88216[m
+Author: saegeullee <lemix777@naver.com>
+Date:   Fri Apr 26 16:07:35 2019 +0900
+
+    Initial commit

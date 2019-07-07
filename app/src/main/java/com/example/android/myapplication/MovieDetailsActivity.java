@@ -27,6 +27,10 @@ import java.util.List;
  * Problem
  * 현재 이 액티비티에서 rotation 을 돌리면 api 호출을 다시 해서 데이터를 가져온다.
  * 그럼 viewModel 을 사용하는 이유가 사라진다.
+ *
+ * -> Problem solved by
+ * Creating MovieDetailsViewModelFactory so that the movieId can be passed while instantiating MovieDetailsViewModel to
+ * call get reviews and trailers method at MovieDetailsViewModel.
  */
 
 public class MovieDetailsActivity extends AppCompatActivity
@@ -64,44 +68,45 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     private void setupViewModel() {
 
-        movieDetailsViewModel = ViewModelProviders.of(this).get(MovieDetailsViewModel.class);
-
-        movieDetailsViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(@Nullable List<Movie> movies) {
-                Log.d(TAG, "onChanged: Retrieving database update from LiveData");
-
-                for(int i = 0; i < movies.size(); i++) {
-                    System.out.println(movies.get(i).toString());
-                }
-            }
-        });
-
-        movieDetailsViewModel.getMoviesListTest();
-
-        movieDetailsViewModel.movieObserver().observe(this, new Observer<Movie>() {
-            @Override
-            public void onChanged(@Nullable Movie movie) {
-
-                if(movie == null) {
-                    isMarkedFavorite = false;
-                } else {
-                    isMarkedFavorite = true;
-                }
-
-                setMarkAsFavoriteBtn();
-            }
-        });
-
-        didUserMarkThisMovieAsFavorite();
-
         if(mMovie != null) {
+
+            MovieDetailsViewModelFactory factory = new MovieDetailsViewModelFactory(this, mMovie.getMovieId());
+            movieDetailsViewModel = ViewModelProviders.of(this, factory).get(MovieDetailsViewModel.class);
+
+            movieDetailsViewModel.movieListObserveTester().observe(this, new Observer<List<Movie>>() {
+                @Override
+                public void onChanged(@Nullable List<Movie> movies) {
+                    Log.d(TAG, "onChanged: Retrieving database update from LiveData");
+
+                    for (int i = 0; i < movies.size(); i++) {
+                        System.out.println(movies.get(i).toString());
+                    }
+                }
+            });
+
+            movieDetailsViewModel.getMoviesListTest();
+
+            movieDetailsViewModel.movieObserver().observe(this, new Observer<Movie>() {
+                @Override
+                public void onChanged(@Nullable Movie movie) {
+
+                    if (movie == null) {
+                        isMarkedFavorite = false;
+                    } else {
+                        isMarkedFavorite = true;
+                    }
+
+                    setMarkAsFavoriteBtn();
+                }
+            });
+
+            didUserMarkThisMovieAsFavorite();
 
             movieDetailsViewModel.movieReviewsObserver().observe(this, new Observer<List<Review>>() {
                 @Override
                 public void onChanged(@Nullable List<Review> reviews) {
                     Log.d(TAG, "onChanged: reviews : " + reviews.toString());
-                    if(reviews.size() == 0) {
+                    if (reviews.size() == 0) {
                         no_reviews.setVisibility(View.VISIBLE);
                     } else {
                         no_reviews.setVisibility(View.GONE);
@@ -110,14 +115,12 @@ public class MovieDetailsActivity extends AppCompatActivity
                 }
             });
 
-            movieDetailsViewModel.getReviews(mMovie.getMovieId());
-
             movieDetailsViewModel.movieTrailersObserver().observe(this, new Observer<List<MovieTrailer>>() {
                 @Override
                 public void onChanged(@Nullable List<MovieTrailer> movieTrailers) {
                     Log.d(TAG, "onChanged: trailers : " + movieTrailers.toString());
 
-                    if(movieTrailers.size() == 0) {
+                    if (movieTrailers.size() == 0) {
                         no_trailers.setVisibility(View.VISIBLE);
                     } else {
                         no_trailers.setVisibility(View.GONE);
@@ -125,9 +128,8 @@ public class MovieDetailsActivity extends AppCompatActivity
                     mTrailerAdapter.setTrailerList(movieTrailers);
                 }
             });
-
-            movieDetailsViewModel.getMovieTrailers(mMovie.getMovieId());
         }
+
     }
 
     /**
