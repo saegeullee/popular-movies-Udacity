@@ -10,6 +10,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical"
     tools:context=".MovieDetailsActivity">
 
@@ -71,10 +72,13 @@
     </LinearLayout>
 
     <LinearLayout
+        android:background="@drawable/white_grey_border_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
+            android:textColor="@color/colorBlack"
+            android:paddingBottom="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
             android:id="@+id/plot_synopsis"
@@ -90,6 +94,31 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trailers"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+
+        <android.support.v7.widget.RecyclerView
+
+            android:id="@+id/trailerRecyclerView"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/reviews"

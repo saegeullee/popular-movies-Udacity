@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.android.myapplication.database.AppDatabase;
 import com.example.android.myapplication.models.Movie;
+import com.example.android.myapplication.models.MovieTrailer;
 import com.example.android.myapplication.models.Review;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MovieDetailsActivity extends AppCompatActivity
-        implements MovieReviewsAdapter.ItemClickListener {
+        implements MovieReviewsAdapter.ItemClickListener,
+        MovieTrailersAdapter.OnItemClickListener {
 
     private static final String TAG = "MovieDetailsActivity";
 
@@ -41,6 +43,9 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     private RecyclerView reviewRecyclerView;
     private MovieReviewsAdapter mReviewAdapter;
+
+    private RecyclerView trailersRecyclerView;
+    private MovieTrailersAdapter mTrailerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +103,16 @@ public class MovieDetailsActivity extends AppCompatActivity
             });
 
             movieDetailsViewModel.getReviews(mMovie.getMovieId());
+
+            movieDetailsViewModel.movieTrailersObserver().observe(this, new Observer<List<MovieTrailer>>() {
+                @Override
+                public void onChanged(@Nullable List<MovieTrailer> movieTrailers) {
+                    Log.d(TAG, "onChanged: trailers : " + movieTrailers.toString());
+                    mTrailerAdapter.setTrailerList(movieTrailers);
+                }
+            });
+
+            movieDetailsViewModel.getMovieTrailers(mMovie.getMovieId());
         }
     }
 
@@ -137,6 +152,13 @@ public class MovieDetailsActivity extends AppCompatActivity
         reviewRecyclerView.setNestedScrollingEnabled(false);
         mReviewAdapter = new MovieReviewsAdapter(this, this);
         reviewRecyclerView.setAdapter(mReviewAdapter);
+
+        trailersRecyclerView = findViewById(R.id.trailerRecyclerView);
+        trailersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        trailersRecyclerView.setNestedScrollingEnabled(false);
+        mTrailerAdapter = new MovieTrailersAdapter(this);
+        trailersRecyclerView.setAdapter(mTrailerAdapter);
+
 
         if(mMovie != null) {
             setTitle(mMovie.getOriginal_title());
@@ -191,6 +213,11 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     @Override
     public void onItemClicked(String itemId) {
+
+    }
+
+    @Override
+    public void onItemClicked(int position) {
 
     }
 }

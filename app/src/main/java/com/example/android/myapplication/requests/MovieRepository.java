@@ -9,9 +9,11 @@ import com.example.android.myapplication.AppExecutors;
 import com.example.android.myapplication.Constants;
 import com.example.android.myapplication.database.AppDatabase;
 import com.example.android.myapplication.models.Movie;
+import com.example.android.myapplication.models.MovieTrailer;
 import com.example.android.myapplication.models.Review;
 import com.example.android.myapplication.utils.responses.MovieResponse;
 import com.example.android.myapplication.utils.responses.ReviewResponse;
+import com.example.android.myapplication.utils.responses.TrailerResponse;
 
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class MovieRepository {
     MutableLiveData<List<Movie>> mMovieList;
     MutableLiveData<List<Movie>> movieListForTest;
     MutableLiveData<List<Review>> mMovieReviews;
+    MutableLiveData<List<MovieTrailer>> mMovieTrailers;
     MutableLiveData<Movie> mMovie;
 
     private static MovieRepository instance;
@@ -58,6 +61,7 @@ public class MovieRepository {
         movieListForTest = new MutableLiveData<>();
         mMovie = new MutableLiveData<>();
         mMovieReviews = new MutableLiveData<>();
+        mMovieTrailers = new MutableLiveData<>();
     }
 
     public void getMoviesFromSource(String queryMethod) {
@@ -117,6 +121,28 @@ public class MovieRepository {
         }
     }
 
+    public void getMovieTrailersFromSource(String movieId) {
+
+
+        getMovieTrailers(movieId).enqueue(new Callback<TrailerResponse>() {
+            @Override
+            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
+                List<MovieTrailer> trailerList = response.body().getTrailerList();
+                Log.d(TAG, "onResponse: trailerList : " + trailerList);
+                Log.d(TAG, "onResponse: trailerList size : " + trailerList.size());
+
+                mMovieTrailers.postValue(trailerList);
+                Log.d(TAG, "Actively retrieving the movie trailers from the Api");
+
+            }
+
+            @Override
+            public void onFailure(Call<TrailerResponse> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
+
     public void getReviewsFromSource(String movieId) {
 
         getMovieReviews(movieId).enqueue(new Callback<ReviewResponse>() {
@@ -136,7 +162,10 @@ public class MovieRepository {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
+    }
 
+    public LiveData<List<MovieTrailer>> getTrailers() {
+        return mMovieTrailers;
     }
 
     public LiveData<List<Review>> getReviews() {
@@ -227,6 +256,11 @@ public class MovieRepository {
 
     private Call<ReviewResponse> getMovieReviews(String movieId) {
         return NetworkRequestGenerator.getMoviesApi().getMovieReviews(
+                movieId, Constants.API_KEY);
+    }
+
+    private Call<TrailerResponse> getMovieTrailers(String movieId) {
+        return NetworkRequestGenerator.getMoviesApi().getMovieTrailers(
                 movieId, Constants.API_KEY);
     }
 }

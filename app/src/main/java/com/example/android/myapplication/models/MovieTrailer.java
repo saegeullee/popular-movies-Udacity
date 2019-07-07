@@ -1,13 +1,13 @@
 package com.example.android.myapplication.models;
 
-public class VideoTrailer {
+public class MovieTrailer {
     private String key;
     private String name;
 
-    public VideoTrailer() {
+    public MovieTrailer() {
     }
 
-    public VideoTrailer(String key, String name) {
+    public MovieTrailer(String key, String name) {
         this.key = key;
         this.name = name;
     }
@@ -30,7 +30,7 @@ public class VideoTrailer {
 
     @Override
     public String toString() {
-        return "VideoTrailer{" +
+        return "MovieTrailer{" +
                 "key='" + key + '\'' +
                 ", name='" + name + '\'' +
                 '}';

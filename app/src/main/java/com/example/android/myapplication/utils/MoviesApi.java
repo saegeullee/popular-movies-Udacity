@@ -3,6 +3,7 @@ package com.example.android.myapplication.utils;
 import com.example.android.myapplication.Constants;
 import com.example.android.myapplication.utils.responses.MovieResponse;
 import com.example.android.myapplication.utils.responses.ReviewResponse;
+import com.example.android.myapplication.utils.responses.TrailerResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -29,4 +30,12 @@ public interface MoviesApi {
             @Path("movie_id") String movie_id,
             @Query("api_key") String api_key
     );
+
+    @GET("{movie_id}/" + Constants.MOVIE_VIDEOS_URL)
+    Call<TrailerResponse> getMovieTrailers(
+            @Path("movie_id") String movie_id,
+            @Query("api_key") String api_key
+    );
+
+
 }
