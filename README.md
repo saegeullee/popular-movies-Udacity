@@ -3,4 +3,4 @@
 개발 기간 : 2019.04 - 2019.06
 
 # 시연 영상
-[![Watch the video](https://img.youtube.com/vi/b27ZWWrtkiY/maxresdefault.jpg)](https://www.youtube.com/watch?v=b27ZWWrtkiY)
+[![Watch the video](https://i.ytimg.com/vi/b27ZWWrtkiY/hqdefault.jpg)](https://www.youtube.com/watch?v=b27ZWWrtkiY)
